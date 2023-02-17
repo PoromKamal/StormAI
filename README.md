@@ -27,3 +27,23 @@ Overall, our live auction application is an innovative platform that leverages 3
 - Unovis - Data visualization (1 complexity point)
 ## (Optional) What complexity points will be attempted as bonus for the challenge factor
 ## What you aim to complete for the alpha version, beta version, and final version
+> Alpha version
+- User registration and login functionality
+- Ability for sellers to create product listings with detailed descriptions, images, and 3D models
+- Bidding functionality that allows users to bid on products in real-time
+- Notifications for when a user has been outbid or has won an auction
+- Payment processing functionality to allow successful bidders to complete their transactions
+
+> Beta version
+- Improved search functionality to allow buyers to easily find products of interest
+- Integration with popular payment gateways to provide users with a wider range of payment options
+- Improved user interface and navigation to make the platform more user-friendly
+- Integration with third-party tools, such as shipping and delivery providers to enable sellers to manage the delivery of their products
+- Enhanced security features, such as two-factor authentication, to protect user data and transactions
+
+> Final version
+- Advanced analytics and reporting tools to allow sellers to track their sales performance and make informed decisions about their product listings
+- Customizable auction settings, such as reserve prices and auction durations, to allow sellers to tailor their listings to their needs
+- Integration with social media platforms to enable sellers to promote their products and attract a wider audience
+- Enhanced customer support tools, such as live chat and support tickets, to provide users with assistance and support when needed
+- Regular updates and maintenance to ensure that the platform remains up-to-date with the latest technology and industry trends.
