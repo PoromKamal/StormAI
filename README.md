@@ -18,5 +18,12 @@ To enhance user experience and trust, our application will have built-in safety 
 
 Overall, our live auction application is an innovative platform that leverages 3D technology to provide a unique and engaging experience for both buyers and sellers, making it an exciting new way to buy and sell goods.
 ## What complexity points will this project contain
+- Auth0: Secure access for everyone. But not just anyone (1 complexity point)<br/>
+- Stripe | Payment Processing Platform for the Internet (2 complexity points)
+- OpenAI API (1 complexity point)
+- Email Delivery, API, Marketing Service | SendGrid (1 complexity point)
+- Communication APIs for SMS, Voice, Video & Authentication | Twilio (1 complexity point)
+- Three.js – JavaScript 3D Library (2 complexity points) 
+- Unovis - Data visualization (1 complexity point)
 ## (Optional) What complexity points will be attempted as bonus for the challenge factor
 ## What you aim to complete for the alpha version, beta version, and final version
