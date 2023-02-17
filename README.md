@@ -3,6 +3,8 @@
 - Project title: Asta
 - Team name: Ctrl-Alt-Defeat
 ## Your focus (frontend focused or backend focused)
+Frontend focused.<br />
+This is because we want our users to have an excellent experience both putting products up for sale and check the products they intend to bid for.
 ## Team members with student numbers
 - Jeremy La, 1007191995
 - Mir Safwat Ayser, 106732813
