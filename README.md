@@ -51,4 +51,4 @@ React Flow - Build interactive node-based UIs
 - Customizable auction settings, such as reserve prices and auction durations, to allow sellers to tailor their listings to their needs
 - Integration with social media platforms to enable sellers to promote their products and attract a wider audience
 - Enhanced customer support tools, such as live chat and support tickets, to provide users with assistance and support when needed
-- Regular updates and maintenance to ensure that the platform remains up-to-date with the latest technology and industry trends.
+- Regular updates and maintenance to ensure that the platform remains up-to-date with the latest technology and industry trends
