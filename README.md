@@ -13,7 +13,7 @@ This is because we want our users to have an excellent experience both putting p
 ## Team members with student numbers
 
 - Jeremy La, 1007191995
-- Mir Safwat Ayser, 106732813
+- Mir Safwat Ayser, 1006732813
 - Porom Kamal, 1007130383
 
 ## Description of the web application
