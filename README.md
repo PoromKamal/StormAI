@@ -10,6 +10,13 @@ This is because we want our users to have an excellent experience both putting p
 - Mir Safwat Ayser, 106732813
 - Porom Kamal, 1007130383
 ## Description of the web application
+Our application is a live auction platform where users can sell and bid on products in real-time. The platform is designed to allow users to put up products for sale and allow potential buyers to place bids on them. The products available for sale will be viewable in 3D, providing an immersive experience for buyers and enhancing their ability to evaluate the product's condition and overall appeal.<br />
+
+The application will have a user-friendly interface that makes it easy for both sellers and buyers to navigate. The sellers can upload detailed product descriptions, images, and 3D models of their products, along with starting bid prices and other relevant details. Buyers can search for products of interest and bid on them in real-time, with the highest bid displayed prominently for all to see.<br />
+
+To enhance user experience and trust, our application will have built-in safety and security features, such as payment verification and dispute resolution. The platform will also provide transparency around the bidding process, ensuring that the highest bidder is awarded the product at the end of the auction.<br />
+
+Overall, our live auction application is an innovative platform that leverages 3D technology to provide a unique and engaging experience for both buyers and sellers, making it an exciting new way to buy and sell goods.
 ## What complexity points will this project contain
 ## (Optional) What complexity points will be attempted as bonus for the challenge factor
 ## What you aim to complete for the alpha version, beta version, and final version
