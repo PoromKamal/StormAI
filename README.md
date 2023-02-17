@@ -44,6 +44,7 @@ React Flow - Build interactive node-based UIs
 - Push API - Web APIs | MDN (3 complexity points)
 - A-Frame – Make WebVR (3 complexity points)
 - PeerJS - Simple peer-to-peer with WebRTC (1 complexity point)
+- Sentry (1 complexity point)
 
 ## What you aim to complete for the alpha version, beta version, and final version
 
