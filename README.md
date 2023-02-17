@@ -26,6 +26,11 @@ Overall, our live auction application is an innovative platform that leverages 3
 - Three.js – JavaScript 3D Library (2 complexity points) 
 - Unovis - Data visualization (1 complexity point)
 ## (Optional) What complexity points will be attempted as bonus for the challenge factor
+React Flow - Build interactive node-based UIs
+- GitHub - mozilla/pdf.js: PDF Reader in JavaScript (2 complexity points) 
+- Push API - Web APIs | MDN (3 complexity points)
+- A-Frame – Make WebVR (3 complexity points) 
+- PeerJS - Simple peer-to-peer with WebRTC (1 complexity point)
 ## What you aim to complete for the alpha version, beta version, and final version
 > Alpha version
 - User registration and login functionality
