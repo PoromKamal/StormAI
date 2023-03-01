@@ -17,7 +17,7 @@ export const WhiteBoardProvider = ({ children }) => {
     const context = canvas.getContext("2d")
     context.scale(2, 2);
     context.lineCap = "round";
-    context.strokeStyle = "black";
+    context.strokeStyle = "red";
     context.lineWidth = 5;
     contextRef.current = context;
   };
