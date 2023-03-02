@@ -58,6 +58,13 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('pingRoom', (roomId) => {
+    const room = rooms[roomId];
+    if (room) {
+      io.to(roomId).emit('receivePing', roomId);
+    } 
+  });
+
   socket.on('getUsers', async (roomId) => {
     const users = rooms[roomId].users;
     console.log(roomId);
@@ -65,11 +72,13 @@ io.on('connection', (socket) => {
   });
 
   socket.on('draw', (x, y) => {
-    socket.broadcast.emit('draw', x, y);
+    const roomId = socket.data.room;
+    socket.to(roomId).emit('draw', x, y);
   });
 
   socket.on('down', (x, y) => {
-    socket.broadcast.emit('ondown', x, y); 
+    const roomId = socket.data.room;
+    socket.to(roomId).emit('ondown', x, y); 
   });
 
   socket.on('disconnect', async () => {

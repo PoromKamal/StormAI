@@ -2,7 +2,7 @@ import './App.css';
 import WhiteBoard from './WhiteBoard';
 import { WhiteBoardProvider } from './WhiteBoardContext';
 import React, { useState } from 'react';
-//import Connected from './Connected';
+import Connected from './Connected';
 import SocketContext from './SocketContext';
 import io from 'socket.io-client';
 
@@ -21,6 +21,7 @@ function App() {
         <WhiteBoardProvider>
           <WhiteBoard backgroundColor={backgroundColor} />
         </WhiteBoardProvider>
+        <Connected />
       </SocketContext.Provider>
     </>
   );

@@ -1,10 +1,8 @@
-import { useState, useEffect } from 'react'
-import { SocketContext } from './SocketContext';
-import io from 'socket.io-client';
-
-//const socket = io('http://localhost:5000');
+import { useState, useEffect, useContext } from 'react'
+import SocketContext from './SocketContext';
 
 const Connected = () => {
+  const socket = useContext(SocketContext);
   const [room, setRoom] = useState('');
   const [joinedRoom, setJoinedRoom] = useState(false);
   const [users, setUsers] = useState([]);
@@ -26,6 +24,10 @@ const Connected = () => {
       setRoom(roomId);
       setJoinedRoom(true);
       socket.emit('getUsers', roomId);
+    });
+
+    socket.on('receivePing', (roomId) => {
+      console.log(`pinging room ${roomId}`);
     });
   }, []);
 
@@ -58,6 +60,7 @@ const Connected = () => {
       {users.map((user, index) => (
         <p key={index}>{user}</p>
       ))}
+      {joinedRoom && (<button onClick={() => socket.emit('pingRoom', room)} className='underline w-max m-auto'>Ping room</button>)}
     </div>
   )
 }
