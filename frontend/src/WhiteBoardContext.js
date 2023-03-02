@@ -1,8 +1,10 @@
 import React, { useContext, useRef, useState } from "react";
+import SocketContext from './SocketContext';
 
 const WhiteBoardContext = React.createContext();
 
 export const WhiteBoardProvider = ({ children }) => {
+  const socket = useContext(SocketContext);
   const [isDrawing, setIsDrawing] = useState(false)
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
@@ -27,6 +29,7 @@ export const WhiteBoardProvider = ({ children }) => {
     contextRef.current.beginPath();
     contextRef.current.moveTo(offsetX, offsetY);
     setIsDrawing(true);
+    socket.emit('down', offsetX, offsetY);
   };
 
   const finishDrawing = () => {
@@ -34,13 +37,18 @@ export const WhiteBoardProvider = ({ children }) => {
     setIsDrawing(false);
   };
 
+  const drawHelper = (x, y) => {
+    contextRef.current.lineTo(x, y);
+    contextRef.current.stroke();
+  }
+
   const draw = ({ nativeEvent }) => {
     if (!isDrawing) {
       return;
     }
     const { offsetX, offsetY } = nativeEvent;
-    contextRef.current.lineTo(offsetX, offsetY);
-    contextRef.current.stroke();
+    drawHelper(offsetX, offsetY);
+    socket.emit('draw', offsetX, offsetY);
   };
 
   return (
@@ -52,6 +60,7 @@ export const WhiteBoardProvider = ({ children }) => {
         startDrawing,
         finishDrawing,
         draw,
+        drawHelper
       }}
     >
       {children}

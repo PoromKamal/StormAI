@@ -1,11 +1,24 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { useWhiteBoard } from "./WhiteBoardContext";
+import SocketContext from './SocketContext';
 
 export function WhiteBoard() {
+  const socket = useContext(SocketContext);
   const [backgroundColor, setBackground] = useState("white");
-  const { canvasRef, prepareWhiteBoard, startDrawing, finishDrawing, draw } =
+  const { canvasRef, contextRef, prepareWhiteBoard, startDrawing, finishDrawing, draw, drawHelper } =
     useWhiteBoard();
   const backgroundRef = useRef(null);
+
+  useEffect(() => {
+    socket.on('draw', (x, y) => {
+      drawHelper(x, y);
+    });
+
+    socket.on('ondown', (x, y) => {
+      contextRef.current.beginPath();
+      contextRef.current.moveTo(x, y);
+    });
+  }, []);
 
   useEffect(() => {
     prepareWhiteBoard();
@@ -30,7 +43,7 @@ export function WhiteBoard() {
 
   const prepareBackground = () => {
     const backgroundCanvas = canvasRef.current;
-    console.log(backgroundCanvas);
+    //console.log(backgroundCanvas);
     if (backgroundCanvas) {
 
 
