@@ -8,6 +8,7 @@ export const WhiteBoardProvider = ({ children }) => {
   const [isDrawing, setIsDrawing] = useState(false)
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
+  const pathRef = useRef(null);
 
   const prepareWhiteBoard = () => {
     const canvas = canvasRef.current
@@ -26,20 +27,36 @@ export const WhiteBoardProvider = ({ children }) => {
 
   const startDrawing = ({ nativeEvent }) => {
     const { offsetX, offsetY } = nativeEvent;
-    contextRef.current.beginPath();
-    contextRef.current.moveTo(offsetX, offsetY);
+    //contextRef.current.beginPath();
+    //contextRef.current.moveTo(offsetX, offsetY);
+    pathRef.current = new Path2D();
+    pathRef.coords = [];
     setIsDrawing(true);
     socket.emit('down', offsetX, offsetY);
   };
 
   const finishDrawing = () => {
-    contextRef.current.closePath();
+    //contextRef.current.closePath();
+    socket.emit('savePath', pathRef.coords);
+    pathRef.current.closePath();
     setIsDrawing(false);
   };
 
-  const drawHelper = (x, y) => {
-    contextRef.current.lineTo(x, y);
+  const drawPath = (path) => {
+    contextRef.current.beginPath();
+    contextRef.current.moveTo(path[0].x, path[0].y);
+    path.forEach((point) => {
+      contextRef.current.lineTo(point.x, point.y);
+    });
     contextRef.current.stroke();
+  }
+
+  const drawHelper = (x, y) => {
+    //contextRef.current.lineTo(x, y);
+    pathRef.current.lineTo(x, y);
+    pathRef.coords.push({ x, y });
+    contextRef.current.stroke(pathRef.current);
+    //contextRef.current.stroke();
   }
 
   const draw = ({ nativeEvent }) => {
@@ -56,11 +73,13 @@ export const WhiteBoardProvider = ({ children }) => {
       value={{
         canvasRef,
         contextRef,
+        pathRef,
         prepareWhiteBoard,
         startDrawing,
         finishDrawing,
         draw,
-        drawHelper
+        drawHelper,
+        drawPath
       }}
     >
       {children}

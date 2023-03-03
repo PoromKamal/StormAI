@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 5000
 class Room {
   constructor(user) {
     this.users = [user];
+    this.paths = [];
   }
 }
 
@@ -41,8 +42,8 @@ io.on('connection', (socket) => {
     socket.join(roomId);
     socket.data.room = roomId;
     socket.emit('roomCreated', roomId);
-    console.log(roomId);
-    console.log(rooms);
+    console.log(`Created room: ${roomId}`);
+    console.log(`All rooms:`, rooms);
   });
 
   socket.on('joinRoom', (roomId) => {
@@ -51,8 +52,9 @@ io.on('connection', (socket) => {
       room.users.push(socket.id);
       socket.join(roomId);
       socket.data.room = roomId;
-      socket.emit('joinedRoom', roomId);
-      console.log(rooms);
+      socket.emit('joinedRoom', roomId, room.paths);
+      console.log(`Joined room: ${roomId}`);
+      console.log(`All rooms:`, rooms);
     } else {
       socket.emit('roomNotFound');
     }
@@ -62,23 +64,30 @@ io.on('connection', (socket) => {
     const room = rooms[roomId];
     if (room) {
       io.to(roomId).emit('receivePing', roomId);
-    } 
+    }
   });
 
   socket.on('getUsers', async (roomId) => {
     const users = rooms[roomId].users;
-    console.log(roomId);
     io.to(roomId).emit('retrieveUsers', users);
   });
 
   socket.on('draw', (x, y) => {
     const roomId = socket.data.room;
-    socket.to(roomId).emit('draw', x, y);
+    roomId && (socket.to(roomId).emit('draw', x, y));
+  });
+
+  socket.on('savePath', (path) => {
+    const roomId = socket.data.room;
+    if (roomId) {
+      rooms[roomId].paths.push(path);
+      socket.to(roomId).emit('savePath', path);
+    }
   });
 
   socket.on('down', (x, y) => {
     const roomId = socket.data.room;
-    socket.to(roomId).emit('ondown', x, y); 
+    socket.to(roomId).emit('ondown', x, y);
   });
 
   socket.on('disconnect', async () => {
@@ -86,6 +95,7 @@ io.on('connection', (socket) => {
     if (room) {
       const sockets = await io.in(room).fetchSockets();
       const users = sockets.map((socket) => socket.id);
+      rooms[room].users = users;
       io.in(room).emit('retrieveUsers', users);
     }
     console.log(`User disconnected: ${socket.id}`);

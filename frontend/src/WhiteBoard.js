@@ -5,18 +5,26 @@ import SocketContext from './SocketContext';
 export function WhiteBoard() {
   const socket = useContext(SocketContext);
   const [backgroundColor, setBackground] = useState("white");
-  const { canvasRef, contextRef, prepareWhiteBoard, startDrawing, finishDrawing, draw, drawHelper } =
+  const { canvasRef, contextRef, pathRef, prepareWhiteBoard, startDrawing, finishDrawing, draw, drawHelper, drawPath } =
     useWhiteBoard();
   const backgroundRef = useRef(null);
 
   useEffect(() => {
+    socket.on('joinedRoom', (roomId, paths) => {
+      paths.forEach((path) => {
+        drawPath(path);
+      });
+    });
+
     socket.on('draw', (x, y) => {
       drawHelper(x, y);
     });
 
     socket.on('ondown', (x, y) => {
-      contextRef.current.beginPath();
-      contextRef.current.moveTo(x, y);
+      //contextRef.current.beginPath();
+      //contextRef.current.moveTo(x, y);
+      pathRef.current = new Path2D();
+      pathRef.current.moveTo(x, y);
     });
   }, []);
 
@@ -88,7 +96,7 @@ export function WhiteBoard() {
       <button onClick={handleBackgroundColorChange}>Change Color</button>
       <button onClick={prepareBackground}>Add Grid</button>
       <button onClick={removeBackground}>Remove Grid</button>
-        <canvas ref={backgroundRef} className="canvas-background"></canvas>
+      <canvas ref={backgroundRef} className="canvas-background"></canvas>
 
     </div>
   );
