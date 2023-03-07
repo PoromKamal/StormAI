@@ -23,6 +23,9 @@ export const WhiteBoardProvider = ({ children }) => {
     context.strokeStyle = "red";
     context.lineWidth = 5;
     contextRef.current = context;
+
+    pathRef.current = new Path2D();
+    pathRef.coords = [];
   };
 
   const startDrawing = ({ nativeEvent }) => {

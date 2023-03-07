@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { useWhiteBoard } from "./WhiteBoardContext";
 import SocketContext from './SocketContext';
+import Cursor from "./Cursor";
 
 export function WhiteBoard() {
   const socket = useContext(SocketContext);
@@ -10,7 +11,8 @@ export function WhiteBoard() {
   const backgroundRef = useRef(null);
 
   useEffect(() => {
-    socket.on('joinedRoom', (roomId, paths) => {
+    socket.on('joinedRoom', (roomId, room) => {
+      let paths = room.paths;
       paths.forEach((path) => {
         drawPath(path);
       });
@@ -20,7 +22,22 @@ export function WhiteBoard() {
       drawHelper(x, y);
     });
 
-    socket.on('ondown', (x, y) => {
+    socket.on('drawCursor', (id, x, y) => {
+      let elementId = `cursor-${id}`;
+      let cursor = document.getElementById(elementId);
+      if (!cursor) {
+        cursor = document.createElement('div');
+        cursor.id = elementId;
+        cursor.className = 'cursor';
+        cursor.innerHTML = `
+        <span className='absolute text-xs -right-1 w-3'>${id}</span>`;
+        document.body.appendChild(cursor);
+      }
+      cursor.style.left = x + 'px';
+      cursor.style.top = y + 'px';
+    });
+
+    socket.on('onDown', (x, y) => {
       //contextRef.current.beginPath();
       //contextRef.current.moveTo(x, y);
       pathRef.current = new Path2D();
@@ -30,6 +47,9 @@ export function WhiteBoard() {
 
   useEffect(() => {
     prepareWhiteBoard();
+    document.getElementById("canvas").addEventListener("mousemove", (e) => {
+      socket.emit("drawCursor", socket.id, e.clientX, e.clientY);
+    });
   }, []);
 
 
@@ -80,14 +100,12 @@ export function WhiteBoard() {
       const backgroundContext = backgroundCanvas.getContext("2d");
       backgroundContext.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
     }
-
-
-
   }
 
   return (
     <div style={{ backgroundColor }}>
       <canvas
+        id="canvas"
         onMouseDown={startDrawing}
         onMouseUp={finishDrawing}
         onMouseMove={draw}

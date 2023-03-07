@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.cursor {
+    position: absolute;
+    background: black;
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+}

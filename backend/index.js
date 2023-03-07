@@ -52,7 +52,7 @@ io.on('connection', (socket) => {
       room.users.push(socket.id);
       socket.join(roomId);
       socket.data.room = roomId;
-      socket.emit('joinedRoom', roomId, room.paths);
+      socket.emit('joinedRoom', roomId, room);
       console.log(`Joined room: ${roomId}`);
       console.log(`All rooms:`, rooms);
     } else {
@@ -77,6 +77,11 @@ io.on('connection', (socket) => {
     roomId && (socket.to(roomId).emit('draw', x, y));
   });
 
+  socket.on('drawCursor', (id, x, y) => {
+    const roomId = socket.data.room;
+    roomId && (socket.to(roomId).emit('drawCursor', id, x, y));
+  });
+
   socket.on('savePath', (path) => {
     const roomId = socket.data.room;
     if (roomId) {
@@ -87,7 +92,7 @@ io.on('connection', (socket) => {
 
   socket.on('down', (x, y) => {
     const roomId = socket.data.room;
-    socket.to(roomId).emit('ondown', x, y);
+    socket.to(roomId).emit('onDown', x, y);
   });
 
   socket.on('disconnect', async () => {

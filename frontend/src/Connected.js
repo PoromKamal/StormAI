@@ -20,7 +20,7 @@ const Connected = () => {
       socket.emit('getUsers', roomId);
     });
 
-    socket.on('joinedRoom', (roomId, paths) => {
+    socket.on('joinedRoom', (roomId, room) => {
       setRoom(roomId);
       setJoinedRoom(true);
       socket.emit('getUsers', roomId);
