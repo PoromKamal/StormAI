@@ -30,8 +30,6 @@ export const WhiteBoardProvider = ({ children }) => {
 
   const startDrawing = ({ nativeEvent }) => {
     const { offsetX, offsetY } = nativeEvent;
-    //contextRef.current.beginPath();
-    //contextRef.current.moveTo(offsetX, offsetY);
     pathRef.current = new Path2D();
     pathRef.coords = [];
     setIsDrawing(true);
@@ -39,7 +37,6 @@ export const WhiteBoardProvider = ({ children }) => {
   };
 
   const finishDrawing = () => {
-    //contextRef.current.closePath();
     socket.emit('savePath', pathRef.coords);
     pathRef.current.closePath();
     setIsDrawing(false);
@@ -55,11 +52,9 @@ export const WhiteBoardProvider = ({ children }) => {
   }
 
   const drawHelper = (x, y) => {
-    //contextRef.current.lineTo(x, y);
     pathRef.current.lineTo(x, y);
     pathRef.coords.push({ x, y });
     contextRef.current.stroke(pathRef.current);
-    //contextRef.current.stroke();
   }
 
   const draw = ({ nativeEvent }) => {
@@ -75,7 +70,6 @@ export const WhiteBoardProvider = ({ children }) => {
     <WhiteBoardContext.Provider
       value={{
         canvasRef,
-        contextRef,
         pathRef,
         prepareWhiteBoard,
         startDrawing,

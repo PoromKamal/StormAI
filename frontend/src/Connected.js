@@ -4,6 +4,7 @@ import SocketContext from './SocketContext';
 const Connected = () => {
   const socket = useContext(SocketContext);
   const [room, setRoom] = useState('');
+  const [currentRoom, setCurrentRoom] = useState('');
   const [joinedRoom, setJoinedRoom] = useState(false);
   const [users, setUsers] = useState([]);
   const [id, setId] = useState('');
@@ -15,13 +16,14 @@ const Connected = () => {
 
     socket.on('roomCreated', (roomId) => {
       setRoom(roomId);
-      console.log(roomId);
+      setCurrentRoom(roomId);
       setJoinedRoom(true);
       socket.emit('getUsers', roomId);
     });
 
     socket.on('joinedRoom', (roomId, room) => {
       setRoom(roomId);
+      setCurrentRoom(roomId);
       setJoinedRoom(true);
       socket.emit('getUsers', roomId);
     });
@@ -56,7 +58,7 @@ const Connected = () => {
       <button onClick={createRoom} className='underline w-max m-auto'>Create room</button>
       <input className='border text-black' placeholder='Join Room...' onChange={(e) => setRoom(e.target.value)} />
       <button onClick={joinRoom} className='underline w-max m-auto'>Join room</button>
-      {joinedRoom && (<h1>In room {room}:</h1>)}
+      {joinedRoom && (<h1>In room {currentRoom}:</h1>)}
       {users.map((user, index) => (
         <p key={index}>{user}</p>
       ))}

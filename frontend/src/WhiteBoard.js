@@ -5,60 +5,71 @@ import Cursor from "./Cursor";
 
 export function WhiteBoard() {
   const socket = useContext(SocketContext);
-  const [backgroundColor, setBackground] = useState("white");
-  const { canvasRef, contextRef, pathRef, prepareWhiteBoard, startDrawing, finishDrawing, draw, drawHelper, drawPath } =
-    useWhiteBoard();
+  const { canvasRef, pathRef, prepareWhiteBoard, startDrawing, finishDrawing, draw, drawHelper, drawPath } = useWhiteBoard();
   const backgroundRef = useRef(null);
+  const [backgroundColor, setBackground] = useState("white");
+  const [cursors, setCursors] = useState([]);
 
   useEffect(() => {
     socket.on('joinedRoom', (roomId, room) => {
+      // Show previous drawings on the canvas
       let paths = room.paths;
       paths.forEach((path) => {
         drawPath(path);
       });
+      // Emit getUsers in order to update the cursors
+      socket.emit('getUsers', roomId);
     });
 
     socket.on('draw', (x, y) => {
+      // Display other users' drawings
       drawHelper(x, y);
     });
 
     socket.on('drawCursor', (id, x, y) => {
-      let elementId = `cursor-${id}`;
-      let cursor = document.getElementById(elementId);
-      if (!cursor) {
-        cursor = document.createElement('div');
-        cursor.id = elementId;
-        cursor.className = 'cursor';
-        cursor.innerHTML = `
-        <span className='absolute text-xs -right-1 w-3'>${id}</span>`;
-        document.body.appendChild(cursor);
-      }
-      cursor.style.left = x + 'px';
-      cursor.style.top = y + 'px';
+      // Display other users' cursors
+      setCursors((prev) => {
+        return prev.map((cursor) => {
+          if (cursor.userId === id) {
+            return { ...cursor, x, y };
+          }
+          return cursor;
+        });
+      });
     });
 
     socket.on('onDown', (x, y) => {
-      //contextRef.current.beginPath();
-      //contextRef.current.moveTo(x, y);
+      // Temporary fix for bug when user joins room and starts drawing
+      // TODO: fix this properly (will probably have to change the way the path is drawn)
       pathRef.current = new Path2D();
       pathRef.current.moveTo(x, y);
     });
   }, []);
 
   useEffect(() => {
+    // Updating cursors when a user joins or leaves the room
+    const handler = (users) => {
+      setCursors(users.filter((user) => user !== socket.id).map((user) => ({ userId: user, x: 0, y: 0 })));
+    }
+
+    socket.on("retrieveUsers", handler);
+
+    return () => socket.off("retrieveUsers", handler);
+  }, []);
+
+  useEffect(() => {
     prepareWhiteBoard();
     document.getElementById("canvas").addEventListener("mousemove", (e) => {
+      // TODO: throttle this event so we don't overload the server
       socket.emit("drawCursor", socket.id, e.clientX, e.clientY);
     });
   }, []);
-
 
   useEffect(() => {
     if (backgroundRef.current) {
       prepareBackground();
     }
   }, [backgroundRef.current]);
-
 
   const handleBackgroundColorChange = () => {
     if (backgroundColor === "white") {
@@ -68,12 +79,9 @@ export function WhiteBoard() {
     }
   };
 
-
   const prepareBackground = () => {
     const backgroundCanvas = canvasRef.current;
-    //console.log(backgroundCanvas);
     if (backgroundCanvas) {
-
 
       const backgroundContext = backgroundCanvas.getContext("2d");
       backgroundContext.beginPath();
@@ -115,7 +123,9 @@ export function WhiteBoard() {
       <button onClick={prepareBackground}>Add Grid</button>
       <button onClick={removeBackground}>Remove Grid</button>
       <canvas ref={backgroundRef} className="canvas-background"></canvas>
-
+      {cursors.map((cursor) => (
+        <Cursor key={`cursor-${cursor.userId}`} cursor={cursor} />
+      ))}
     </div>
   );
 }

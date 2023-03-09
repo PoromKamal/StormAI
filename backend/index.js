@@ -77,6 +77,11 @@ io.on('connection', (socket) => {
     roomId && (socket.to(roomId).emit('draw', x, y));
   });
 
+  socket.on('down', (x, y) => {
+    const roomId = socket.data.room;
+    socket.to(roomId).emit('onDown', x, y);
+  });
+
   socket.on('drawCursor', (id, x, y) => {
     const roomId = socket.data.room;
     roomId && (socket.to(roomId).emit('drawCursor', id, x, y));
@@ -88,11 +93,6 @@ io.on('connection', (socket) => {
       rooms[roomId].paths.push(path);
       socket.to(roomId).emit('savePath', path);
     }
-  });
-
-  socket.on('down', (x, y) => {
-    const roomId = socket.data.room;
-    socket.to(roomId).emit('onDown', x, y);
   });
 
   socket.on('disconnect', async () => {
