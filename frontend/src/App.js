@@ -1,12 +1,22 @@
 import './App.css';
-import React from 'react';
+import WhiteBoard from './WhiteBoard';
+import { WhiteBoardProvider } from './WhiteBoardContext';
+import React, { useState } from 'react';
+
 function App() {
+  const [backgroundColor, setBackgroundColor] = useState('white');
+
+  const handleBackgroundColorChange = () => {
+    setBackgroundColor('lightblue');
+  };
+
   return (
-    <div className="App">
-      <h1 className="text-3xl font-bold underline">
-        Hello world!
-      </h1>
-    </div>
+    <>
+
+      <WhiteBoardProvider>
+        <WhiteBoard backgroundColor={backgroundColor} />
+      </WhiteBoardProvider>
+    </>
   );
 }
 
