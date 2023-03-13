@@ -21,6 +21,9 @@ function App() {
         <WhiteBoardProvider>
           <WhiteBoard backgroundColor={backgroundColor} />
         </WhiteBoardProvider>
+        <a href='http://localhost:5500/oauth2/authorization/auth0'>
+          TEST
+        </a>
         <Connected />
       </SocketContext.Provider>
     </>
