@@ -53,7 +53,7 @@ const Connected = () => {
   }
 
   return (
-    <div className='flex flex-col fixed top-0 right-0 w-96 p-4 m-2 border rounded-md bg-white'>
+    <div className='flex flex-col fixed top-0 right-0 w-96 p-4 m-2 border rounded-md bg-white justify-center items-center'>
       {id && (<h1>Connected as {id}</h1>)}
       <button onClick={createRoom} className='underline w-max m-auto'>Create room</button>
       <input className='border text-black' placeholder='Join Room...' onChange={(e) => setRoom(e.target.value)} />
@@ -63,6 +63,11 @@ const Connected = () => {
         <p key={index}>{user}</p>
       ))}
       {joinedRoom && (<button onClick={() => socket.emit('pingRoom', room)} className='underline w-max m-auto'>Ping room</button>)}
+        <a href='http://localhost:5500/oauth2/authorization/auth0' className='flex'>
+          <button className='bg-slate-300  rounded-lg h-8 w-14'>
+            Signin
+          </button>
+        </a>
     </div>
   )
 }
