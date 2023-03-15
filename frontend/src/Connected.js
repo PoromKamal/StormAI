@@ -63,8 +63,7 @@ const Connected = () => {
   }
 
   return (
-    <div className='flex flex-col fixed top-0 right-0 w-96 p-4 m-2 border rounded-md bg-white justify-center items-center'>\
-      {}
+    <div className='flex flex-col fixed top-0 right-0 w-96 p-4 m-2 border rounded-md bg-white justify-center items-center'>
       {user && (<h1>Logged in as {user.username}</h1>)}
       <button onClick={createRoom} className='underline w-max m-auto'>Create room</button>
       <input className='border text-black' placeholder='Join Room...' onChange={(e) => setRoom(e.target.value)} />
