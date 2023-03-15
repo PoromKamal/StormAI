@@ -1,8 +1,10 @@
 package com.auth0.example.model;
 
-import lombok.*;
-
 import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "Users")
@@ -22,6 +24,5 @@ public class User {
   )
   private Long id;
   private String email;
-  private String firstName;
-  private String lastName;
+  private String username; //Not unique, will init as their given name
 }
