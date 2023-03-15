@@ -68,6 +68,11 @@ const Connected = () => {
             Signin
           </button>
         </a>
+        <a href='http://localhost:5500/logout' className='flex'>
+          <button className='bg-slate-300  rounded-lg h-8 w-14'>
+            logout
+          </button>
+        </a>
     </div>
   )
 }
