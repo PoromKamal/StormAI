@@ -23,7 +23,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
             // allow all users to access the home pages and the static images directory
-            .mvcMatchers("/", "/images/**").permitAll()
+            .mvcMatchers("/", "/images/**", "/getMe").permitAll()
             // all other requests must be authenticated
             .anyRequest().authenticated()
             .and().oauth2Login()

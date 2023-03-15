@@ -60,7 +60,7 @@ public class LogoutHandler extends SecurityContextLogoutHandler {
         String returnTo = ServletUriComponentsBuilder.fromCurrentContextPath().build().toString();
 
         String logoutUrl = UriComponentsBuilder
-                .fromHttpUrl(issuer + "v2/logout?client_id={clientId}&returnTo=http://localhost:3000") //Temporarily hard-coded to localhost:3000
+                .fromHttpUrl(issuer + "v2/logout?client_id={clientId}&returnTo=http://localhost:3000") //Temporarily hard-coded values
                 .encode()
                 .buildAndExpand(clientId, returnTo)
                 .toUriString();

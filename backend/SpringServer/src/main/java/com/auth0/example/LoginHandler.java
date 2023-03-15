@@ -19,6 +19,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class LoginHandler implements AuthenticationSuccessHandler{
 
@@ -33,17 +35,33 @@ public class LoginHandler implements AuthenticationSuccessHandler{
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
     String email = getEmail((OAuth2AuthenticationToken) authentication);
-    String username = getGivenName((OAuth2AuthenticationToken) authentication);
+    String username = getName((OAuth2AuthenticationToken) authentication);
     userService.registerUser(email, username);
     response.sendRedirect("http://localhost:3000/");
   }
 
-  public String getGivenName(OAuth2AuthenticationToken authentication) {
-    return authentication.getPrincipal().getAttributes().get("given_name").toString();
+  public String getName(OAuth2AuthenticationToken authentication) {
+    //Check if given name is present
+    Map<String, Object> attributes = authentication.getPrincipal().getAttributes();
+    if(attributes.get("given_name") != null){
+      return attributes.get("given_name").toString();
+    }
+
+    //If not, check nickname
+    if(attributes.get("nickname") != null){
+      return attributes.get("nickname").toString();
+    }
+
+    //If not, check if name is present
+    if(attributes.get("name") != null){
+      return attributes.get("name").toString();
+    }
+
+    //If not, just use email
+    return getEmail(authentication);
   }
 
   public String getEmail(OAuth2AuthenticationToken authentication) {
     return authentication.getPrincipal().getAttributes().get("email").toString();
   }
-
 }
