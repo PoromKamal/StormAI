@@ -9,15 +9,15 @@ const Connected = () => {
   const [joinedRoom, setJoinedRoom] = useState(false);
   const [users, setUsers] = useState([]);
   const [id, setId] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
       apiService.getMe().then((response) => {
         console.log(response);
         if(response.error){
-          setIsAuthenticated(false);
+          setUser(null);
         } else{
-          setIsAuthenticated(true);
+          setUser(response);
         }
       })
     socket.on('connect', () => {
@@ -63,7 +63,9 @@ const Connected = () => {
   }
 
   return (
-    <div className='flex flex-col fixed top-0 right-0 w-96 p-4 m-2 border rounded-md bg-white justify-center items-center'>
+    <div className='flex flex-col fixed top-0 right-0 w-96 p-4 m-2 border rounded-md bg-white justify-center items-center'>\
+      {}
+      {user && (<h1>Logged in as {user.username}</h1>)}
       {id && (<h1>Connected as {id}</h1>)}
       <button onClick={createRoom} className='underline w-max m-auto'>Create room</button>
       <input className='border text-black' placeholder='Join Room...' onChange={(e) => setRoom(e.target.value)} />
@@ -74,7 +76,7 @@ const Connected = () => {
       ))}
       {joinedRoom && (<button onClick={() => socket.emit('pingRoom', room)} className='underline w-max m-auto'>Ping room</button>)}
       {
-        isAuthenticated ? (        <a href='http://localhost:5500/logout' className='flex'>
+        user ? (        <a href='http://localhost:5500/logout' className='flex'>
         <button className='bg-slate-300  rounded-lg h-8 w-14'>
           logout
         </button>
