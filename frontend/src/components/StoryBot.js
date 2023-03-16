@@ -17,7 +17,7 @@ export default function ArtistBot() {
         <div className="fixed bg-slate-400 rounded-md top-80 right-10 w-16 h-16 text-center cursor-pointer" onClick={() =>{setIsOpen(!isOpen)}}>
             Story Bot
         </div>
-        <div className={`${isOpen ? "hidden" : "flex-col"} fixed bg-slate-400 rounded-md top-96 right-10 w-96 h-96 text-center pt-5 px-10`}>
+        <div className={`${isOpen ? "flex-col" : "hidden"} fixed bg-slate-400 rounded-md top-96 right-10 w-96 h-96 text-center pt-5 px-10`}>
             <div>
             Hey I'm Story Bot, let's write a story.
             </div>

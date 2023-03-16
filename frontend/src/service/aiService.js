@@ -13,15 +13,14 @@ export default class aiService{
                 "return_full_text": true,
                 "do_sample": true,
                 "early_stopping": false,
-                "length_penalty": 0.0
             },
             "options": {
-                "use_cache": false,
+                "use_cache": true,
                 "wait_for_model": false
             }
         }
 
-        return fetch("https://api-inference.huggingface.co/models/bigscience/bloom", {
+        return fetch("https://api-inference.huggingface.co/models/gpt2", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
