@@ -1,7 +1,9 @@
 import './App.css';
 import WhiteBoard from './WhiteBoard';
 import { WhiteBoardProvider } from './WhiteBoardContext';
-import React, { useState } from 'react';
+import Flowboard from './flowboard/components/Flowboard';
+import { ReactFlowProvider } from 'reactflow';
+import React, { useEffect, useState } from 'react';
 import Connected from './Connected';
 import SocketContext from './SocketContext';
 import io from 'socket.io-client';
@@ -18,9 +20,9 @@ function App() {
   return (
     <>
       <SocketContext.Provider value={socket}>
-        <WhiteBoardProvider>
-          <WhiteBoard backgroundColor={backgroundColor} />
-        </WhiteBoardProvider>
+        <ReactFlowProvider>
+          <Flowboard />
+        </ReactFlowProvider>
         <Connected />
       </SocketContext.Provider>
     </>
