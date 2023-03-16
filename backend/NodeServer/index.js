@@ -82,9 +82,9 @@ io.on('connection', (socket) => {
     socket.to(roomId).emit('onDown', x, y);
   });
 
-  socket.on('drawCursor', (id, x, y) => {
+  socket.on('drawCursor', (id, username, x, y) => {
     const roomId = socket.data.room;
-    roomId && (socket.to(roomId).emit('drawCursor', id, x, y));
+    roomId && (socket.to(roomId).emit('drawCursor', id, username, x, y));
   });
 
   socket.on('savePath', (path) => {

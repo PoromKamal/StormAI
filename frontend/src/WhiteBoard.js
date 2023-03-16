@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useContext } from "react";
 import { useWhiteBoard } from "./WhiteBoardContext";
 import SocketContext from './SocketContext';
 import Cursor from "./Cursor";
+import apiService from './service/apiService';
 
 export function WhiteBoard() {
   const socket = useContext(SocketContext);
@@ -9,8 +10,15 @@ export function WhiteBoard() {
   const backgroundRef = useRef(null);
   const [backgroundColor, setBackground] = useState("white");
   const [cursors, setCursors] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
+    apiService.getMe().then((response) => {
+      console.log(response);
+      if (response.username != null) {
+        setCurrentUser(response.username);
+      }
+    })
     socket.on('joinedRoom', (roomId, room) => {
       // Show previous drawings on the canvas
       let paths = room.paths;
@@ -26,10 +34,11 @@ export function WhiteBoard() {
       drawHelper(x, y);
     });
 
-    socket.on('drawCursor', (id, x, y) => {
+    socket.on('drawCursor', (id, currentUser, x, y) => {
       // Display other users' cursors
       setCursors((prev) => {
         return prev.map((cursor) => {
+          console.log(cursor);
           if (cursor.userId === id) {
             return { ...cursor, x, y };
           }
@@ -49,7 +58,7 @@ export function WhiteBoard() {
   useEffect(() => {
     // Updating cursors when a user joins or leaves the room
     const handler = (users) => {
-      setCursors(users.filter((user) => user !== socket.id).map((user) => ({ userId: user, x: 0, y: 0 })));
+      setCursors(users.filter((user) => user !== socket.id).map((user) => ({ userId: user, x: 0, y: 0, username: currentUser})));
     }
 
     socket.on("retrieveUsers", handler);
@@ -61,7 +70,7 @@ export function WhiteBoard() {
     prepareWhiteBoard();
     document.getElementById("canvas").addEventListener("mousemove", (e) => {
       // TODO: throttle this event so we don't overload the server
-      socket.emit("drawCursor", socket.id, e.clientX, e.clientY);
+      socket.emit("drawCursor", socket.id, currentUser, e.clientX, e.clientY);
     });
   }, []);
 
