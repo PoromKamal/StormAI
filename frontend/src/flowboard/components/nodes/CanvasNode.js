@@ -1,8 +1,9 @@
-import { useState, useLayoutEffect, useRef, useCallback, useEffect } from 'react'
-import { nodesMap } from '../../hooks/useNodesStateSynced';
+import { useState, useLayoutEffect, useRef, useEffect, useContext } from 'react'
+import { YjsContext } from '../../../room/components/Room';
 
 const CanvasNode = ({ id, data }) => {
   const [drawing, setDrawing] = useState(false);
+  const { yDoc } = useContext(YjsContext);
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const pathRef = useRef(null);
@@ -20,7 +21,7 @@ const CanvasNode = ({ id, data }) => {
   }, [])
 
   useEffect(() => {
-    const currentNode = nodesMap.get(id);
+    const currentNode = yDoc.getMap('nodes').get(id);
     if (currentNode.data.points) {
       drawAllPoints(currentNode.data.points);
     }
@@ -49,35 +50,35 @@ const CanvasNode = ({ id, data }) => {
     setDrawing(false);
   }
 
-  const drawHelper = (x, y) => {
-    pathRef.current.lineTo(x, y);
-    pathRef.coords.push({ x, y });
-    contextRef.current.stroke(pathRef.current);
-  }
+  // const drawHelper = (x, y) => {
+  //   pathRef.current.lineTo(x, y);
+  //   pathRef.coords.push({ x, y });
+  //   contextRef.current.stroke(pathRef.current);
+  // }
 
   const draw = (e) => {
     if (!drawing) return;
-    const currentNode = nodesMap.get(id);
+    const currentNode = yDoc.getMap('nodes').get(id);
     const currentPoints = currentNode.data.points || [];
     const { x, y } = getMousePos(canvasRef.current, e);
-    nodesMap.set(id, {
+    yDoc.getMap('nodes').set(id, {
       ...currentNode,
       data: { points: [...currentPoints, { x, y }] },
     });
     drawAllPoints(currentNode.data.points);
   }
 
-  const onDraw = useCallback((e) => {
-    if (!drawing) return;
-    const currentNode = nodesMap.get(id);
-    const currentPoints = currentNode.data.points || [];
-    const { x, y } = getMousePos(canvasRef.current, e);
-    nodesMap.set(id, {
-      ...currentNode,
-      data: { points: [...currentPoints, { x, y }] },
-    });
-    drawAllPoints(currentNode.data.points);
-  }, [])
+  // const onDraw = useCallback((e) => {
+  //   if (!drawing) return;
+  //   const currentNode = yDoc.getMap('nodes').get(id);
+  //   const currentPoints = currentNode.data.points || [];
+  //   const { x, y } = getMousePos(canvasRef.current, e);
+  //   yDoc.getMap('nodes').set(id, {
+  //     ...currentNode,
+  //     data: { points: [...currentPoints, { x, y }] },
+  //   });
+  //   drawAllPoints(currentNode.data.points);
+  // }, [])
 
   function getMousePos(canvas, evt) {
     var rect = canvas.getBoundingClientRect();

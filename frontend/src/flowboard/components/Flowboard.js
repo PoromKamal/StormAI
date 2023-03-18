@@ -1,12 +1,12 @@
-import React, { useRef, useCallback } from 'react';
-import ReactFlow, { MarkerType, Background, Controls, useReactFlow } from 'reactflow';
+import React, { useRef, useCallback, useContext } from 'react';
+import ReactFlow, { MarkerType, Background, Controls, useReactFlow, useStore } from 'reactflow';
 import CanvasNode from './nodes/CanvasNode';
 import StickyNode from './nodes/StickyNode';
 import CustomNode from './nodes/CustomNode';
 import Sidebar from './Sidebar';
-import useNodesStateSynced, { nodesMap } from '../hooks/useNodesStateSynced';
-import useEdgesStateSynced, { edgesMap } from '../hooks/useEdgesStateSynced';
-import useAutoLayout from '../hooks/useAutoLayout';
+import useNodesStateSynced from '../hooks/useNodesStateSynced';
+import useEdgesStateSynced from '../hooks/useEdgesStateSynced';
+import { YjsContext } from '../../room/components/Room';
 
 import 'reactflow/dist/style.css';
 import styles from '../styles/style.module.css';
@@ -18,7 +18,7 @@ const nodeTypes = {
 };
 
 const edgeTypes = {
-  
+
 };
 
 const defaultEdgeOptions = {
@@ -38,21 +38,22 @@ const Flowboard = () => {
   const wrapperRef = useRef(null);
   const [nodes, onNodesChange] = useNodesStateSynced();
   const [edges, onEdgesChange, onConnect] = useEdgesStateSynced();
+  const { yDoc, yjsProvider } = useContext(YjsContext);
   const { project } = useReactFlow();
 
   const onNodeClick = useCallback((_, node) => {
-    const currentNode = nodesMap.get(node.id);
+    const currentNode = yDoc.getMap('nodes').get(node.id);
     console.log(currentNode);
     if (currentNode) {
-      nodesMap.set(node.id, {
+      yDoc.getMap('nodes').set(node.id, {
         ...currentNode,
         className: undefined,
       });
     }
     window.setTimeout(() => {
-      const currentNode = nodesMap.get(node.id);
+      const currentNode = yDoc.getMap('nodes').get(node.id);
       if (currentNode) {
-        nodesMap.set(node.id, {
+        yDoc.getMap('nodes').set(node.id, {
           ...currentNode,
           className: undefined,
         });
@@ -66,23 +67,34 @@ const Flowboard = () => {
     if (wrapperRef.current) {
       const wrapperBounds = wrapperRef.current.getBoundingClientRect();
       const type = event.dataTransfer.getData('application/reactflow');
-      const position = project({ x: event.clientX - wrapperBounds.x - 80, y: event.clientY - wrapperBounds.top - 20 });
+      const position = project({ x: event.clientX - wrapperBounds.left - 80, y: event.clientY - wrapperBounds.top - 20 });
       const newNode = {
         id: getId(),
         type,
         position,
         data: { label: `${type}` },
       };
-
-      nodesMap.set(newNode.id, newNode);
+      console.log(newNode);
+      yDoc.getMap('nodes').set(newNode.id, newNode);
     }
   };
 
+  const sendCursorData = (event) => {
+    const wrapperBounds = wrapperRef.current.getBoundingClientRect();
+    const position = project({ x: event.clientX - wrapperBounds.left, y: event.clientY - wrapperBounds.top });
+    const user = yjsProvider.awareness.getLocalState().user;
+    //console.log(user);
+    yjsProvider.awareness.setLocalStateField('user', {
+      ...user,
+      cursor: position,
+    });
+  }
+
   return (
     <div className={styles.wrapper}>
-      <Sidebar />
       <div className={styles.rfWrapper} ref={wrapperRef}>
         <ReactFlow
+          onMouseMove={sendCursorData}
           nodes={nodes}
           edges={edges}
           nodeTypes={nodeTypes}
@@ -95,10 +107,11 @@ const Flowboard = () => {
           onNodeClick={onNodeClick}
           defaultEdgeOptions={defaultEdgeOptions}
         >
-          <Background color="#99b3ec" variant='dots'/>
+          <Background color="#99b3ec" variant='lines' />
           <Controls />
         </ReactFlow>
       </div>
+      <Sidebar />
     </div>
   );
 }

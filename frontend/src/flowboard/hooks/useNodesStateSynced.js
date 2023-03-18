@@ -1,18 +1,16 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useContext } from 'react';
 import { applyNodeChanges, getConnectedEdges } from 'reactflow';
-import ydoc from '../ydoc';
-import { edgesMap } from './useEdgesStateSynced';
-
-export const nodesMap = ydoc.getMap('nodes');
+import { YjsContext } from '../../room/components/Room';
 
 const isNodeAddChange = (change) => change.type === 'add';
 const isNodeResetChange = (change) => change.type === 'reset';
 
 const useNodesStateSynced = () => {
   const [nodes, setNodes] = useState([]);
+  const { yDoc } = useContext(YjsContext);
 
   const onNodesChange = useCallback((changes) => {
-    const nodes = Array.from(nodesMap.values()).filter((n) => n);
+    const nodes = Array.from(yDoc.getMap('nodes').values()).filter((n) => n);
 
     const nextNodes = applyNodeChanges(changes, nodes);
     changes.forEach((change) => {
@@ -20,14 +18,14 @@ const useNodesStateSynced = () => {
         const node = nextNodes.find((n) => n.id === change.id);
 
         if (node && change.type !== 'remove') {
-          nodesMap.set(change.id, node);
+          yDoc.getMap('nodes').set(change.id, node);
         } else if (change.type === 'remove') {
-          const deletedNode = nodesMap.get(change.id);
-          nodesMap.delete(change.id);
+          const deletedNode = yDoc.getMap('nodes').get(change.id);
+          yDoc.getMap('nodes').delete(change.id);
           // when a node is removed, we also need to remove the connected edges
-          const edges = Array.from(edgesMap.values()).map((e) => e);
+          const edges = Array.from(yDoc.getMap('edges').values()).map((e) => e);
           const connectedEdges = getConnectedEdges(deletedNode ? [deletedNode] : [], edges);
-          connectedEdges.forEach((edge) => edgesMap.delete(edge.id));
+          connectedEdges.forEach((edge) => yDoc.getMap('edges').delete(edge.id));
         }
       }
     });
@@ -35,13 +33,13 @@ const useNodesStateSynced = () => {
 
   useEffect(() => {
     const observer = () => {
-      setNodes(Array.from(nodesMap.values()));
+      setNodes(Array.from(yDoc.getMap('nodes').values()));
     };
 
-    setNodes(Array.from(nodesMap.values()));
-    nodesMap.observe(observer);
+    setNodes(Array.from(yDoc.getMap('nodes').values()));
+    yDoc.getMap('nodes').observe(observer);
 
-    return () => nodesMap.unobserve(observer);
+    return () => yDoc.getMap('nodes').unobserve(observer);
   }, [setNodes]);
 
   return [nodes.filter((n) => n), onNodesChange];

@@ -7,7 +7,7 @@ const onDragStart = (event, nodeType) => {
 
 const Sidebar = () => {
   return (
-    <aside className=''>
+    <div className='absolute'>
       <div
         className="react-flow__node-default"
         onDragStart={(event) => onDragStart(event, 'sticky')}
@@ -29,7 +29,7 @@ const Sidebar = () => {
       >
         Custom Node
       </div>
-    </aside>
+    </div>
   );
 };
 

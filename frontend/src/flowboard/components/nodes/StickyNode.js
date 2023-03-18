@@ -1,11 +1,12 @@
-import { useCallback } from 'react'
-import { nodesMap } from '../../hooks/useNodesStateSynced';
+import { useCallback, useContext } from 'react'
+import { YjsContext } from '../../../room/components/Room';
 
 const StickyNode = ({ id, data }) => {
+  const { yDoc } = useContext(YjsContext);
 
   const onChange = useCallback((e) => {
-    const currentNode = nodesMap.get(id);
-    nodesMap.set(id, {
+    const currentNode = yDoc.getMap('nodes').get(id);
+    yDoc.getMap('nodes').set(id, {
       ...currentNode,
       data: { label: e.target.value },
     });
