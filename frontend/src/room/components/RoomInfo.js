@@ -16,7 +16,6 @@ const RoomInfo = () => {
         }
       })
       setUsers(newUsers);
-      console.log(newUsers);
     }
 
     awareness.on('change', handler);
