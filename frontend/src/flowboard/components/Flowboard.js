@@ -46,6 +46,7 @@ const Flowboard = () => {
   const [cursors, setCursors] = useState([]);
   const store = useStoreApi();
   const transform = useRef(store.getState().transform);
+  const [panning, setPanning] = useState(false);
 
   useEffect(() => store.subscribe(
     state => (transform.current = state.transform)
@@ -96,7 +97,7 @@ const Flowboard = () => {
         id: getId(),
         type,
         position,
-        data: { label: `${type}`, cursor: {name: 'test', color: '#1be7ff'} },
+        data: { label: `${type}`, cursor: { name: 'test', color: '#1be7ff' } },
       };
       console.log(newNode);
       yDoc.getMap('nodes').set(newNode.id, newNode);
@@ -104,47 +105,26 @@ const Flowboard = () => {
   };
 
   const sendCursorData = (event) => {
+    event.preventDefault();
     const wrapperBounds = wrapperRef.current.getBoundingClientRect();
-    const position = project({ x: event.clientX - wrapperBounds.left, y: event.clientY - wrapperBounds.top });
+    const position = project({ x: (event.clientX - wrapperBounds.left - transform.current[0]) / transform.current[2], y: (event.clientY - wrapperBounds.top - transform.current[1]) / transform.current[2]});
     const user = yjsProvider.awareness.getLocalState().user;
-    // yjsProvider.awareness.setLocalStateField('user', {
-    //   ...user,
-    //   cursor: position,
-    // });
     const cursorNode = yDoc.getMap('nodes').get(`${user.name}-cursor`);
     if (cursorNode) {
-      console.log('here1');
       yDoc.getMap('nodes').set(`${user.name}-cursor`, {
         ...cursorNode,
         position,
       });
     } else {
-      console.log('here2')
       const newNode = {
         id: `${user.name}-cursor`,
         type: 'cursor',
         position,
-        data: { label: `${user.name}`, cursor: {name: user.name, color: user.color} },
+        data: { label: `${user.name}`, cursor: { name: user.name, color: user.color } },
         zIndex: 1000,
       };
       yDoc.getMap('nodes').set(newNode.id, newNode);
     }
-
-    // const wrapperBounds = wrapperRef.current.getBoundingClientRect();
-    // const [x, y] = [event.clientX - wrapperBounds.left, event.clientY - wrapperBounds.top];
-
-    // // Get the current zoom level and viewport of the React Flow canvas
-    // const viewportX = transform.current[0];
-    // const viewportY = transform.current[1];
-    // const zoom = transform.current[2];
-
-    // // Convert the absolute mouse position to the relative position within the canvas
-    // const [canvasX, canvasY] = [(x - viewportX) / zoom, (y - viewportY) / zoom];
-    // const user = yjsProvider.awareness.getLocalState().user;
-    // yjsProvider.awareness.setLocalStateField('user', {
-    //   ...user,
-    //   cursor: { x: canvasX , y: canvasY },
-    // });
   }
 
   const throttledSendCursorData = useCallback(throttle(sendCursorData, 20), []);
@@ -153,7 +133,7 @@ const Flowboard = () => {
     <div className={styles.wrapper}>
       <div className={styles.rfWrapper} ref={wrapperRef}>
         <ReactFlow
-          onMouseMove={throttledSendCursorData}
+          onPaneMouseMove={throttledSendCursorData}
           nodes={nodes.filter(node => node.id !== `${yjsProvider.awareness.getLocalState().user.name}-cursor`)}
           edges={edges}
           nodeTypes={nodeTypes}
@@ -165,7 +145,7 @@ const Flowboard = () => {
           onDragOver={onDragOver}
           defaultEdgeOptions={defaultEdgeOptions}
         >
-          <Background color="#99b3ec" variant='lines' />
+          <Background color="#99b3ec" variant={yDoc.getMap('settings').get('variant')} />
           <Controls className='bg-white rounded' />
           {/* {cursors.filter(user => user.cursor).filter(user => user.name !== awareness.getLocalState().user.name).map((user, index) => (
             <Cursor key={index} user={user} />
