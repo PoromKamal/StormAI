@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import { YjsContext } from './Room';
+import Cursor from '../../cursors/components/Cursor';
 
 const RoomInfo = () => {
   const { yjsProvider } = useContext(YjsContext);
@@ -29,11 +30,6 @@ const RoomInfo = () => {
           <p key={index} style={{ color: user.color }}>{user.name}</p>
         ))}
       </div>
-      {users.filter(user => user.cursor).filter(user => user.name !== awareness.getLocalState().user.name).map((user, index) => (
-        <div key={index} className='absolute border z-50' style={{ left: `${user.cursor.x}px`, top: `${user.cursor.y}px`, color: `${user.color}` }}>
-          {user.name}
-        </div>
-      ))}
     </>
   )
 }

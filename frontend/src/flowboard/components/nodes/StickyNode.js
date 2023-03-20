@@ -13,7 +13,9 @@ const StickyNode = ({ id, data }) => {
   }, [])
 
   return (
-    <div className='bg-gray-200 h-48 w-48 p-3 border rounded flex'>
+    <div className='bg-gray-200 h-48 w-48 p-3 border rounded flex' style={{
+      transition: "transform 1s linear",
+    }}>
       <textarea
         value={data.label}
         spellCheck={false}

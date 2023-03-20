@@ -45,7 +45,7 @@ const Room = () => {
 
   if (!roomCreatedOrJoined) {
     return (
-      <div className='h-full bg-white flex justify-center content-center'>
+      <div className='h-full flex justify-center content-center'>
         <div className='w-96 flex flex-col border bg-gray-100 m-auto justify-center p-4 rounded'>
           <p>This is what it would look like if an anonymous user (user without an account) wants to use the app.
           If they have an account and are signed in, we don't need to show the username input.</p>

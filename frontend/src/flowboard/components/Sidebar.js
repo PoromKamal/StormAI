@@ -22,13 +22,6 @@ const Sidebar = () => {
       >
         Canvas Node
       </div>
-      <div
-        className="react-flow__node-default"
-        onDragStart={(event) => onDragStart(event, 'custom')}
-        draggable
-      >
-        Custom Node
-      </div>
     </div>
   );
 };

@@ -93,7 +93,7 @@ const CanvasNode = ({ id, data }) => {
       onMouseDown={startDrawing}
       onMouseUp={finishDrawing}
       onMouseMove={draw}>
-      <div className="dragHandle bg-black h-8">
+      <div className="dragHandle bg-black h-4">
         
       </div>
       <div>
