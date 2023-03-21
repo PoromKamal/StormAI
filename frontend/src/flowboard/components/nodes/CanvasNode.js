@@ -22,63 +22,55 @@ const CanvasNode = ({ id, data }) => {
 
   useEffect(() => {
     const currentNode = yDoc.getMap('nodes').get(id);
-    if (currentNode.data.points) {
-      drawAllPoints(currentNode.data.points);
+    if (currentNode.data.paths) {
+      drawAllPaths(currentNode.data.paths);
     }
   }, [data])
 
-  const drawPoint = (x, y) => {
-    contextRef.current.fillRect(x, y, 1, 1);
+  const drawPath = (path) => {
+    contextRef.current.beginPath();
+    contextRef.current.moveTo(path[0].x, path[0].y);
+    path.forEach((point) => {
+      contextRef.current.lineTo(point.x, point.y);
+    });
+    contextRef.current.stroke();
   }
 
-  const drawAllPoints = (points) => {
-    //contextRef.current.clearRect(0, 0, 400, 400)
-    if (!points) return;
-    points.forEach((point) => {
-      drawPoint(point.x, point.y);
+  const drawAllPaths = (paths) => {
+    console.log(paths);
+    paths.forEach((path) => {
+      drawPath(path);
     })
   }
 
-  const startDrawing = () => {
+  const startDrawing = (e) => {
     pathRef.current = new Path2D();
-    pathRef.coords = [];
+    const { x, y } = getMousePos(canvasRef.current, e);
+    pathRef.coords = [{ x, y }];
     setDrawing(true);
   }
 
-  const finishDrawing = () => {
+  const finishDrawing = (e) => {
     pathRef.current.closePath();
     setDrawing(false);
+    const currentNode = yDoc.getMap('nodes').get(id);
+    yDoc.getMap('nodes').set(id, {
+      ...currentNode,
+      data: { paths: [...currentNode.data.paths, pathRef.coords] },
+    });
   }
 
-  // const drawHelper = (x, y) => {
-  //   pathRef.current.lineTo(x, y);
-  //   pathRef.coords.push({ x, y });
-  //   contextRef.current.stroke(pathRef.current);
-  // }
+  const drawHelper = (x, y) => {
+    pathRef.current.lineTo(x, y);
+    pathRef.coords.push({ x, y });
+    contextRef.current.stroke(pathRef.current);
+  }
 
   const draw = (e) => {
     if (!drawing) return;
-    const currentNode = yDoc.getMap('nodes').get(id);
-    const currentPoints = currentNode.data.points || [];
     const { x, y } = getMousePos(canvasRef.current, e);
-    yDoc.getMap('nodes').set(id, {
-      ...currentNode,
-      data: { points: [...currentPoints, { x, y }] },
-    });
-    drawAllPoints(currentNode.data.points);
+    drawHelper(x, y);
   }
-
-  // const onDraw = useCallback((e) => {
-  //   if (!drawing) return;
-  //   const currentNode = yDoc.getMap('nodes').get(id);
-  //   const currentPoints = currentNode.data.points || [];
-  //   const { x, y } = getMousePos(canvasRef.current, e);
-  //   yDoc.getMap('nodes').set(id, {
-  //     ...currentNode,
-  //     data: { points: [...currentPoints, { x, y }] },
-  //   });
-  //   drawAllPoints(currentNode.data.points);
-  // }, [])
 
   function getMousePos(canvas, evt) {
     var rect = canvas.getBoundingClientRect();
@@ -89,13 +81,10 @@ const CanvasNode = ({ id, data }) => {
   }
 
   return (
-    <div className=' bg-transparent border border-black rounded flex flex-col'
+    <div className='bg-transparent rounded focus:ring-1 focus:ring-black focus:border-t-8 focus:border-black focus:-mt-2'
       onMouseDown={startDrawing}
       onMouseUp={finishDrawing}
-      onMouseMove={draw}>
-      <div className="dragHandle bg-black h-4">
-        
-      </div>
+      onMouseMove={draw} tabIndex="0">
       <div>
         <canvas className='nodrag' width="400" height="400" ref={canvasRef}></canvas>
       </div>

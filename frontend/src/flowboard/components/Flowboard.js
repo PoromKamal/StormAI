@@ -65,26 +65,11 @@ const Flowboard = () => {
   //   awareness.on('change', handler);
   // }, [awareness]);
 
-  // const onNodeClick = useCallback((_, node) => {
-  //   const currentNode = yDoc.getMap('nodes').get(node.id);
-  //   console.log(currentNode);
-  //   if (currentNode) {
-  //     yDoc.getMap('nodes').set(node.id, {
-  //       ...currentNode,
-  //       position: { x: currentNode.position.x , y: currentNode.position.y },
-  //       className: undefined,
-  //     });
-  //   }
-  //   window.setTimeout(() => {
-  //     const currentNode = yDoc.getMap('nodes').get(node.id);
-  //     if (currentNode) {
-  //       yDoc.getMap('nodes').set(node.id, {
-  //         ...currentNode,
-  //         className: undefined,
-  //       });
-  //     }
-  //   }, 3000);
-  // }, []);
+  const onNodeClick = useCallback((_, node) => {
+    const currentNode = yDoc.getMap('nodes').get(node.id);
+    console.log(currentNode);
+    console.log(node);
+  }, []);
 
   const onDrop = (event) => {
     event.preventDefault();
@@ -97,7 +82,7 @@ const Flowboard = () => {
         id: getId(),
         type,
         position,
-        data: { label: `${type}`, cursor: { name: 'test', color: '#1be7ff' } },
+        data: { label: `${type}`, cursor: { name: 'test', color: '#1be7ff' }, paths: [] },
       };
       console.log(newNode);
       yDoc.getMap('nodes').set(newNode.id, newNode);
@@ -140,6 +125,7 @@ const Flowboard = () => {
           edgeTypes={edgeTypes}
           onEdgesChange={onEdgesChange}
           onNodesChange={onNodesChange}
+          onNodeClick={onNodeClick}
           onConnect={onConnect}
           onDrop={onDrop}
           onDragOver={onDragOver}
