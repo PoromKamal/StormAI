@@ -23,6 +23,17 @@ const edgeTypes = {
 
 };
 
+const nodeColor = (node) => {
+  switch (node.type) {
+    case 'sticky':
+      return '#004d40';
+    case 'cursor':
+      return '#76ff03';
+    default:
+      return 'rgb(17 24 39)';
+  }
+};
+
 const defaultEdgeOptions = {
   type: 'smoothstep',
   markerEnd: { type: MarkerType.ArrowClosed },
@@ -133,10 +144,7 @@ const Flowboard = () => {
         >
           <Background color="#99b3ec" variant={yDoc.getMap('settings').get('variant')} />
           <Controls className='bg-white rounded' />
-          {/* {cursors.filter(user => user.cursor).filter(user => user.name !== awareness.getLocalState().user.name).map((user, index) => (
-            <Cursor key={index} user={user} />
-          ))} */}
-          <MiniMap />
+          <MiniMap nodeColor={nodeColor} nodeStrokeWidth={3} zoomable pannable />
         </ReactFlow>
       </div>
       <Sidebar />

@@ -30,6 +30,7 @@ const Room = () => {
     const provider = new WebrtcProvider(roomName, doc, { signaling: ['ws://localhost:1234'] });
     provider.awareness.setLocalStateField('user', { name: username, color: userColours[Math.floor(Math.random() * userColours.length)] });
     doc.getMap('settings').set('variant', 'lines');
+    doc.getMap('roomInfo').set('name', roomName);
     setYDoc(doc);
     setYjsProvider(provider);
     setRoomCreatedOrJoined(true);
