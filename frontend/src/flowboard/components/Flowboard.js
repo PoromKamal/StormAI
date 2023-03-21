@@ -1,9 +1,8 @@
-import React, { useRef, useCallback, useContext, useState, useEffect } from 'react';
-import ReactFlow, { MarkerType, Background, Controls, useReactFlow, useStoreApi, useStore, MiniMap } from 'reactflow';
+import React, { useRef, useCallback, useContext, useEffect } from 'react';
+import ReactFlow, { MarkerType, Background, Controls, useReactFlow, useStoreApi, MiniMap } from 'reactflow';
 import CanvasNode from './nodes/CanvasNode';
 import StickyNode from './nodes/StickyNode';
 import CursorNode from './nodes/CursorNode';
-import Cursor from '../../cursors/components/Cursor';
 import Sidebar from './Sidebar';
 import useNodesStateSynced from '../hooks/useNodesStateSynced';
 import useEdgesStateSynced from '../hooks/useEdgesStateSynced';
@@ -40,48 +39,33 @@ const defaultEdgeOptions = {
   pathOptions: { offset: 5 },
 };
 
-const getId = () => `dndnode_${Math.random() * 10000}`;
-
-const onDragOver = (event) => {
-  event.preventDefault();
-  event.dataTransfer.dropEffect = 'move';
-};
-
 const Flowboard = () => {
   const wrapperRef = useRef(null);
   const [nodes, onNodesChange] = useNodesStateSynced();
   const [edges, onEdgesChange, onConnect] = useEdgesStateSynced();
   const { yDoc, yjsProvider } = useContext(YjsContext);
   const { project } = useReactFlow();
-  const [awareness] = useState(yjsProvider.awareness);
-  const [cursors, setCursors] = useState([]);
   const store = useStoreApi();
   const transform = useRef(store.getState().transform);
-  const [panning, setPanning] = useState(false);
 
+  // Required to get the current pan and zoom values
   useEffect(() => store.subscribe(
     state => (transform.current = state.transform)
   ), [])
 
-  // useEffect(() => {
-  //   const handler = () => {
-  //     const newCursors = [];
-  //     awareness.getStates().forEach(state => {
-  //       if (state.user) {
-  //         newCursors.push(state.user);
-  //       }
-  //     })
-  //     setCursors(newCursors);
-  //   }
-  //   awareness.on('change', handler);
-  // }, [awareness]);
+  const getId = () => `dndnode_${Math.random() * 10000}`;
 
   const onNodeClick = useCallback((_, node) => {
-    const currentNode = yDoc.getMap('nodes').get(node.id);
-    console.log(currentNode);
     console.log(node);
   }, []);
 
+  // For dragging and dropping nodes
+  const onDragOver = (event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  };
+
+  // For dragging and dropping nodes
   const onDrop = (event) => {
     event.preventDefault();
 
@@ -93,9 +77,8 @@ const Flowboard = () => {
         id: getId(),
         type,
         position,
-        data: { label: `${type}`, cursor: { name: 'test', color: '#1be7ff' }, paths: [] },
+        data: { label: `${type}`, paths: [] },
       };
-      console.log(newNode);
       yDoc.getMap('nodes').set(newNode.id, newNode);
     }
   };
@@ -103,6 +86,7 @@ const Flowboard = () => {
   const sendCursorData = (event) => {
     event.preventDefault();
     const wrapperBounds = wrapperRef.current.getBoundingClientRect();
+    // Compute the position of the cursor relative to the pan and zoom values
     const position = project({ x: (event.clientX - wrapperBounds.left - transform.current[0]) / transform.current[2], y: (event.clientY - wrapperBounds.top - transform.current[1]) / transform.current[2]});
     const user = yjsProvider.awareness.getLocalState().user;
     const cursorNode = yDoc.getMap('nodes').get(`${user.name}-cursor`);
@@ -123,6 +107,7 @@ const Flowboard = () => {
     }
   }
 
+  // Throttle the cursor data to 20ms
   const throttledSendCursorData = useCallback(throttle(sendCursorData, 20), []);
 
   return (
