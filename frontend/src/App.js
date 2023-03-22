@@ -1,31 +1,12 @@
 import './App.css';
-import WhiteBoard from './WhiteBoard';
-import { WhiteBoardProvider } from './WhiteBoardContext';
-import React, { useState } from 'react';
-import Connected from './Connected';
-import SocketContext from './SocketContext';
-import io from 'socket.io-client';
-
-export const socket = io('http://localhost:5000');
+import Room from './room/components/Room';
+import React from 'react';
 
 function App() {
-  const [backgroundColor, setBackgroundColor] = useState('white');
-
-  const handleBackgroundColorChange = () => {
-    setBackgroundColor('lightblue');
-  };
 
   return (
     <>
-      <SocketContext.Provider value={socket}>
-        <WhiteBoardProvider>
-          <WhiteBoard backgroundColor={backgroundColor} />
-        </WhiteBoardProvider>
-        <a href='http://localhost:5500/oauth2/authorization/auth0'>
-          TEST
-        </a>
-        <Connected />
-      </SocketContext.Provider>
+      <Room/>
     </>
   );
 }

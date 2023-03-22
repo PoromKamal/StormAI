@@ -1,3 +1,42 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  margin: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  overflow:hidden;
+}
+
+
+.react-flow .react-flow__connectionline {
+  z-index: 0;
+}
+
+.dragHandle {
+  pointer-events: all;
+}
+
+.input {
+  pointer-events: all;
+}
+
+.input:focus {
+  pointer-events: all;
+}
+
+.textarea {
+  resize: none;
+  pointer-events: all;
+}
+
+.textarea:focus {
+  resize: none;
+  pointer-events: all;
+}
+
