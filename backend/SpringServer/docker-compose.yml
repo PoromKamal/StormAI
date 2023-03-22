@@ -1,0 +1,21 @@
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:9.6
+    restart: always
+    environment:
+      POSTGRES_USER: stormai
+      POSTGRES_PASSWORD: stormai
+    volumes:
+        - ./postgres:/var/lib/postgresql/data
+    ports:
+        - "5432:5432"
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: stormai@stormai.com
+      PGADMIN_DEFAULT_PASSWORD: stormai
+    ports:
+        - "5050:80"
