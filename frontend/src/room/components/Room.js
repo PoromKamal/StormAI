@@ -53,8 +53,19 @@ const Room = () => {
           If they have an account and are signed in, we don't need to show the username input.</p>
           <label className=''>Room Name</label>
           <input type="text" value={roomName} onChange={(e) => setRoomName(e.target.value)} />
-          <label className='mt-2'>Username</label>
+          <div className='flex justify-center'>
+            <div className='m-5 h-0.5 w-80 bg-black'/>
+          </div>
+          <h className="font-bold text-center">Continue Anonymous: </h>
+
+          <label>Username</label>
           <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+          
+          <h className="font-bold text-center">or</h>
+          <a className='mt-4 underline text-center font-bold' href={`${process.env.REACT_APP_AUTH_SERVER}/oauth2/authorization/auth0`}>Login/Signup</a>
+          <div className='flex justify-center'>
+            <div className='m-5 h-0.5 w-80 bg-black'/>
+          </div>
           <button className='mt-4 underline' onClick={createRoom}>Create Room</button>
           <button className='mt-2 underline' onClick={joinRoom}>Join Room</button>
         </div>
