@@ -56,6 +56,7 @@ const Flowboard = () => {
   const getId = () => `dndnode_${Math.random() * 10000}`;
 
   const onNodeClick = useCallback((_, node) => {
+    // For debugging, can remove later
     console.log(node);
   }, []);
 

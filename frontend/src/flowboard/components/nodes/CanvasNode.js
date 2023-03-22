@@ -37,7 +37,6 @@ const CanvasNode = ({ id, data }) => {
   }
 
   const drawAllPaths = (paths) => {
-    console.log(paths);
     paths.forEach((path) => {
       drawPath(path);
     })
