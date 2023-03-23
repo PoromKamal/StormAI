@@ -34,11 +34,10 @@ This platform will revolutionize the way teams collaborate, and brainstorm, as i
 - Stripe | Payment Processing Platform for the Internet (2 complexity points)
 - OpenAI API (1 complexity point)
 - bigscience/bloom API (3 complexity points)
-- socket.io  (2 complexity points)
+- React Flow  (2 complexity points)
+- Yjs (3 complexity points)
 
 ## (Optional) What complexity points will be attempted as bonus for the challenge factor
-
-React Flow - Build interactive node-based UIs
 
 - Push API - Web APIs | MDN (3 complexity points)
 - PeerJS - Simple peer-to-peer with WebRTC (1 complexity point)
