@@ -27,7 +27,7 @@ const Room = () => {
 
   const createRoom = () => {
     const doc = new Doc();
-    const provider = new WebrtcProvider(roomName, doc, { signaling: ['ws://localhost:1234'] });
+    const provider = new WebrtcProvider(roomName, doc, { signaling: ['ws://localhost:4444'] });
     provider.awareness.setLocalStateField('user', { name: username, color: userColours[Math.floor(Math.random() * userColours.length)] });
     doc.getMap('settings').set('variant', 'lines');
     doc.getMap('roomInfo').set('name', roomName);
@@ -38,7 +38,7 @@ const Room = () => {
 
   const joinRoom = () => {
     const doc = new Doc();
-    const provider = new WebrtcProvider(roomName, doc, { signaling: ['ws://localhost:1234'] });
+    const provider = new WebrtcProvider(roomName, doc, { signaling: ['ws://localhost:4444'] });
     provider.awareness.setLocalStateField('user', { name: username, color: userColours[Math.floor(Math.random() * userColours.length)] });
     setYDoc(doc);
     setYjsProvider(provider);
