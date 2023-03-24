@@ -4,7 +4,7 @@ import RoomInfo from './RoomInfo';
 import { ReactFlowProvider } from 'reactflow';
 import { Doc } from 'yjs'
 import { WebrtcProvider } from 'y-webrtc'
-
+import PayButton from './PayButton';
 export const YjsContext = createContext(null);
 
 const userColours = [
@@ -57,6 +57,7 @@ const Room = () => {
           <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
           <button className='mt-4 underline' onClick={createRoom}>Create Room</button>
           <button className='mt-2 underline' onClick={joinRoom}>Join Room</button>
+          <PayButton/>
         </div>
       </div>
     );
