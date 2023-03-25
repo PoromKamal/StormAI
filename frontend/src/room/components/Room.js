@@ -1,9 +1,11 @@
-import { useState, createContext } from 'react';
+import { useState, createContext, useEffect } from 'react';
 import Flowboard from '../../flowboard/components/Flowboard';
 import RoomInfo from './RoomInfo';
 import { ReactFlowProvider } from 'reactflow';
 import { Doc } from 'yjs'
 import { WebrtcProvider } from 'y-webrtc'
+import AuthButton from '../../flowboard/components/button/AuthButton';
+import apiService from '../../services/apiService';
 
 export const YjsContext = createContext(null);
 
@@ -24,6 +26,20 @@ const Room = () => {
   const [roomCreatedOrJoined, setRoomCreatedOrJoined] = useState(false);
   const [yjsProvider, setYjsProvider] = useState(null);
   const [yDoc, setYDoc] = useState(null);
+  const [user, setUser] = useState({ authenticated: false });
+
+  useEffect(() => {
+    apiService.getMe().then((response) => {
+      let user = {};
+      if(response.error != null){
+          user = {"authenticated": false};
+      }else{
+          user = {"authenticated": true, "username": response.username};
+      }
+      setUser(user);
+  });
+  }, [])
+  
 
   const createRoom = () => {
     const doc = new Doc();
@@ -45,7 +61,7 @@ const Room = () => {
     setRoomCreatedOrJoined(true);
   };
 
-  if (!roomCreatedOrJoined) {
+  if (!roomCreatedOrJoined && !user.authenticated) {
     return (
       <div className='h-full flex justify-center content-center'>
         <div className='w-96 flex flex-col border bg-gray-100 m-auto justify-center p-4 rounded'>
@@ -53,8 +69,35 @@ const Room = () => {
           If they have an account and are signed in, we don't need to show the username input.</p>
           <label className=''>Room Name</label>
           <input type="text" value={roomName} onChange={(e) => setRoomName(e.target.value)} />
-          <label className='mt-2'>Username</label>
+          <div className='flex justify-center'>
+            <div className='m-5 h-0.5 w-80 bg-black'/>
+          </div>
+          <h className="font-bold text-center">Continue Anonymous: </h>
+
+          <label>Username</label>
           <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+          
+          <h className="font-bold text-center">or</h>
+          <a className='mt-4 underline text-center font-bold' href={`${process.env.REACT_APP_AUTH_SERVER}/oauth2/authorization/auth0`}>Login/Signup</a>
+          <div className='flex justify-center'>
+            <div className='m-5 h-0.5 w-80 bg-black'/>
+          </div>
+          <button className='mt-4 underline' onClick={createRoom}>Create Room</button>
+          <button className='mt-2 underline' onClick={joinRoom}>Join Room</button>
+        </div>
+      </div>
+    );
+  }
+  else if(!roomCreatedOrJoined){
+    return (
+      <div className='h-full flex justify-center content-center'>
+        <div className='w-96 flex flex-col border bg-gray-100 m-auto justify-center p-4 rounded'>
+          Welcome {user.username}!
+          <div className='flex justify-center'>
+            <div className='m-2 h-0.5 w-80 bg-black'/>
+          </div>
+          <label className=''>Room Name</label>
+          <input type="text" value={roomName} onChange={(e) => setRoomName(e.target.value)} />
           <button className='mt-4 underline' onClick={createRoom}>Create Room</button>
           <button className='mt-2 underline' onClick={joinRoom}>Join Room</button>
         </div>
@@ -66,6 +109,7 @@ const Room = () => {
     <>
       <YjsContext.Provider value={{ yDoc, yjsProvider }}>
         <RoomInfo />
+        <AuthButton />
         <ReactFlowProvider>
           <Flowboard />
         </ReactFlowProvider>
