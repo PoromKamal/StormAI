@@ -4,6 +4,7 @@ import RoomInfo from './RoomInfo';
 import { ReactFlowProvider } from 'reactflow';
 import { Doc } from 'yjs'
 import { WebrtcProvider } from 'y-webrtc'
+import AuthButton from '../../flowboard/components/button/AuthButton';
 
 export const YjsContext = createContext(null);
 
@@ -77,6 +78,7 @@ const Room = () => {
     <>
       <YjsContext.Provider value={{ yDoc, yjsProvider }}>
         <RoomInfo />
+        <AuthButton />
         <ReactFlowProvider>
           <Flowboard />
         </ReactFlowProvider>
