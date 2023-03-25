@@ -88,7 +88,7 @@ const Room = () => {
       </div>
     );
   }
-  else if(!roomCreatedOrJoined && user.authenticated){
+  else if(!roomCreatedOrJoined){
     return (
       <div className='h-full flex justify-center content-center'>
         <div className='w-96 flex flex-col border bg-gray-100 m-auto justify-center p-4 rounded'>
