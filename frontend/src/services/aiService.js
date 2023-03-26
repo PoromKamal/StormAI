@@ -29,4 +29,16 @@ export default class apiService{
             return response.json();
         });
     }
+
+    static generateImage(prompt){
+        return fetch(`${process.env.REACT_APP_ARTIST_BOT_SERVER}`, {
+            method: 'POST',
+            headers: {
+                "Authorization": `Bearer ${process.env.REACT_APP_HUGGINGFACE_TOKEN}`
+            },
+            body: JSON.stringify(prompt)
+        }).then((response) =>{
+            return response.blob();
+        })
+    }
 }
