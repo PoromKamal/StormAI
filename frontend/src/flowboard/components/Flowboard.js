@@ -9,7 +9,7 @@ import useNodesStateSynced from '../hooks/useNodesStateSynced';
 import useEdgesStateSynced from '../hooks/useEdgesStateSynced';
 import { YjsContext } from '../../room/components/Room';
 import { throttle } from 'lodash';
-
+import AiDropdownButton from './button/AiDropdownButton';
 import 'reactflow/dist/style.css';
 import styles from '../styles/style.module.css';
 

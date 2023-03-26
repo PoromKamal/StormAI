@@ -110,7 +110,6 @@ const Room = () => {
     <>
       <YjsContext.Provider value={{ yDoc, yjsProvider }}>
         <RoomInfo />
-        <AiDropdownButton/>
         <AuthButton />
         <ReactFlowProvider>
           <Flowboard />
