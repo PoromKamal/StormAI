@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect }  from "react";
 import { AiOutlineInfoCircle } from 'react-icons/ai';
-import { FaRegUserCircle, FaRobot } from 'react-icons/fa';
+import { FaRegUserCircle, FaRobot, FaPaintBrush } from 'react-icons/fa';
 import { MdHistoryEdu } from 'react-icons/md';
 import { YjsContext } from '../../../room/components/Room';
 import apiService from "../../../services/apiService";
@@ -40,21 +40,31 @@ const AiDropdownButton = () => {
             </div>
             {dropdownOpen &&
             <div className="flex flex-col text-center left-10 top-64 fixed w-72 h-64 p-4 mr-14 mt-2 border rounded-md bg-gray-900 text-white opacity-90 z-50 shadow">
-                <ToolTip title="Drag these onto the board!">
-                    <div className="m-2 w-5 h-5 bg-gray-700 text-white border-none rounded-full shadow-md flex justify-center items-center text-xl hover:bg-gray-700 hover:scale-110 transition-transform hover: cursor-pointer">
-                        <AiOutlineInfoCircle/>
-                    </div>
-                </ToolTip>
+                <div className="mb-5">
+                    <ToolTip title="Drag these onto the board!">
+                        <div className="m-2 w-5 h-5 bg-gray-700 text-white border-none rounded-full shadow-md flex justify-center items-center text-xl hover:bg-gray-700 hover:scale-110 transition-transform hover: cursor-pointer">
+                            <AiOutlineInfoCircle/>
+                        </div>
+                    </ToolTip>
 
-                <div className="flex items-center mb-10">
-                    <div className="m-2 w-10 h-10 bg-gray-700 text-white border-none rounded shadow-md flex justify-center items-center text-xl hover:bg-gray-700 hover:scale-110 transition-transform hover: cursor-pointer"
-                        onDragStart={(event) => onDragStart(event, "story")}
-                        draggable>
-                        <MdHistoryEdu/>
+                    <div className="flex items-center">
+                        <div className="m-2 w-10 h-10 bg-gray-700 text-white border-none rounded shadow-md flex justify-center items-center text-xl hover:bg-gray-700 hover:scale-110 transition-transform hover: cursor-pointer"
+                            onDragStart={(event) => onDragStart(event, "story")}
+                            draggable>
+                            <MdHistoryEdu/>
+                        </div>
+                        <div>Story bot</div>
                     </div>
-                    <div>Story bot</div>
+                    <div className="flex items-center">
+                        <div className="m-2 w-10 h-10 bg-gray-700 text-white border-none rounded shadow-md flex justify-center items-center text-xl hover:bg-gray-700 hover:scale-110 transition-transform hover: cursor-pointer"
+                            onDragStart={(event) => onDragStart(event, "artist")}
+                            draggable>
+                            <FaPaintBrush/>
+                        </div>
+                        <div>Artist bot</div>
+                    </div>
                 </div>
-                Subscribe for more bots!
+                Subscrible for more bots!
             </div>
             }
         </>

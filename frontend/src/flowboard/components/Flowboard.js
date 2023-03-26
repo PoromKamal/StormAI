@@ -12,12 +12,14 @@ import { throttle } from 'lodash';
 import AiDropdownButton from './button/AiDropdownButton';
 import 'reactflow/dist/style.css';
 import styles from '../styles/style.module.css';
+import ArtistNode from './nodes/ArtistNode';
 
 const nodeTypes = {
   canvas: CanvasNode,
   sticky: StickyNode,
   cursor: CursorNode,
   story: StoryNode,
+  artist: ArtistNode
 };
 
 const edgeTypes = {
