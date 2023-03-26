@@ -6,6 +6,7 @@ import { Doc } from 'yjs'
 import { WebrtcProvider } from 'y-webrtc'
 import AuthButton from '../../flowboard/components/button/AuthButton';
 import apiService from '../../services/apiService';
+import AiDropdownButton from '../../flowboard/components/button/AiDropdownButton';
 
 export const YjsContext = createContext(null);
 

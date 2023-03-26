@@ -7,7 +7,7 @@ const AuthButton = () => {
     const { yDoc, yjsProvider } = useContext(YjsContext);
     const [user, setUser] = useState({"authenticated": false});
     const [loginOpen, setLoginOpen] = useState(false);
-
+      
     useEffect(() => {
         apiService.getMe().then((response) => {
             let user = {};
@@ -29,7 +29,8 @@ const AuthButton = () => {
     return (
         <>
             <div className="z-50 top-12 right-0 m-2 absolute w-10 h-10 bg-gray-900 text-white border-none rounded shadow-md flex justify-center items-center text-xl hover:bg-gray-700 hover:scale-110 transition-transform hover: cursor-pointer"
-            onClick={toggleModal}>
+            onClick={toggleModal}
+            >
                 <FaRegUserCircle/>
             </div>
             {loginOpen ? 

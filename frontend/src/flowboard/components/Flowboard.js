@@ -3,12 +3,13 @@ import ReactFlow, { MarkerType, Background, Controls, useReactFlow, useStoreApi,
 import CanvasNode from './nodes/CanvasNode';
 import StickyNode from './nodes/StickyNode';
 import CursorNode from './nodes/CursorNode';
+import StoryNode from './nodes/StoryNode';
 import Sidebar from './Sidebar';
 import useNodesStateSynced from '../hooks/useNodesStateSynced';
 import useEdgesStateSynced from '../hooks/useEdgesStateSynced';
 import { YjsContext } from '../../room/components/Room';
 import { throttle } from 'lodash';
-
+import AiDropdownButton from './button/AiDropdownButton';
 import 'reactflow/dist/style.css';
 import styles from '../styles/style.module.css';
 
@@ -16,10 +17,10 @@ const nodeTypes = {
   canvas: CanvasNode,
   sticky: StickyNode,
   cursor: CursorNode,
+  story: StoryNode,
 };
 
 const edgeTypes = {
-
 };
 
 const nodeColor = (node) => {
