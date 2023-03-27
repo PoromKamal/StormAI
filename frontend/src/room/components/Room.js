@@ -1,4 +1,5 @@
 import { useState, createContext, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Flowboard from '../../flowboard/components/Flowboard';
 import RoomInfo from './RoomInfo';
 import { ReactFlowProvider } from 'reactflow';
@@ -7,7 +8,6 @@ import { WebrtcProvider } from 'y-webrtc'
 import AuthButton from '../../flowboard/components/button/AuthButton';
 import apiService from '../../services/apiService';
 import roomService from '../services/RoomService';
-import AiDropdownButton from '../../flowboard/components/button/AiDropdownButton';
 
 export const YjsContext = createContext(null);
 
@@ -23,6 +23,7 @@ const userColours = [
 ]
 
 const Room = () => {
+  const { roomId } = useParams();
   const [roomName, setRoomName] = useState('');
   const [username, setUsername] = useState('');
   const [roomCreatedOrJoined, setRoomCreatedOrJoined] = useState(false);
@@ -31,18 +32,18 @@ const Room = () => {
   const [yDoc, setYDoc] = useState(null);
   const [user, setUser] = useState({ authenticated: false });
 
-  // useEffect(() => {
-  //   apiService.getMe().then((response) => {
-  //     let user = {};
-  //     if(response.error != null){
-  //         user = {"authenticated": false};
-  //     }else{
-  //         user = {"authenticated": true, "username": response.username};
-  //     }
-  //     setUser(user);
-  // });
-  // }, [])
-  
+  useEffect(() => {
+    apiService.getMe().then((response) => {
+      let user = {};
+      if(response.error != null){
+          user = {"authenticated": false};
+      }else{
+          user = {"authenticated": true, "username": response.username};
+      }
+      setUser(user);
+  });
+  }, [])
+
 
   const createRoom = async () => {
     const res = await roomService.createRoom({ name: roomName });
@@ -61,39 +62,55 @@ const Room = () => {
   };
 
   const joinRoom = async () => {
-    const res = await roomService.getRoom(roomName);
+    const roomIdOrName = roomId || roomName;
+    const res = await roomService.getRoom(roomIdOrName);
+    console.log(res);
     if (!res.success) {
       setRoomExists(false);
       return;
     }
     const doc = new Doc();
-    const provider = new WebrtcProvider(roomName, doc, { signaling: ['ws://localhost:4444'] });
+    const provider = new WebrtcProvider(res.room._id, doc, { signaling: ['ws://localhost:4444'] });
     provider.awareness.setLocalStateField('user', { name: username, color: userColours[Math.floor(Math.random() * userColours.length)] });
+    doc.getMap('roomInfo').set('info', res.room);
     setYDoc(doc);
     setYjsProvider(provider);
     setRoomCreatedOrJoined(true);
   };
 
-  if (!roomCreatedOrJoined && !user.authenticated) {
+  if (!roomCreatedOrJoined && roomId) {
+    return (
+      <div className='h-full flex justify-center content-center'>
+        <div className='w-96 flex flex-col border bg-gray-100 m-auto justify-center p-4 rounded'>
+          <p>You've been invited to:</p>
+          <p className='text-2xl'>{roomId}</p>
+          <label className='mt-2'>Username</label>
+          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+          {!roomExists && <p className='text-red-500'>Sorry! That room does not exist</p>}
+          <button className='mt-4 underline' onClick={joinRoom}>Join Room</button>
+        </div>
+      </div>
+    )
+  } else if (!roomCreatedOrJoined && !user.authenticated) {
     return (
       <div className='h-full flex justify-center content-center'>
         <div className='w-96 flex flex-col border bg-gray-100 m-auto justify-center p-4 rounded'>
           <p>This is what it would look like if an anonymous user (user without an account) wants to use the app.
-          If they have an account and are signed in, we don't need to show the username input.</p>
-          <label>Room Name/Room ID</label>
+            If they have an account and are signed in, we don't need to show the username input.</p>
+          <label>Room Name/Code</label>
           <input type="text" value={roomName} onChange={(e) => setRoomName(e.target.value)} />
           <div className='flex justify-center'>
-            <div className='m-5 h-0.5 w-80 bg-black'/>
+            <div className='m-5 h-0.5 w-80 bg-black' />
           </div>
           <h1 className="font-bold text-center">Continue Anonymous: </h1>
 
           <label>Username</label>
           <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-          
+
           <h1 className="font-bold text-center">or</h1>
           <a className='mt-4 underline text-center font-bold' href={`${process.env.REACT_APP_AUTH_SERVER}/oauth2/authorization/auth0`}>Login/Signup</a>
           <div className='flex justify-center'>
-            <div className='m-5 h-0.5 w-80 bg-black'/>
+            <div className='m-5 h-0.5 w-80 bg-black' />
           </div>
           {!roomExists && <p className='text-red-500'>Room does not exist</p>}
           <button className='mt-4 underline' onClick={createRoom}>Create Room</button>
@@ -102,15 +119,15 @@ const Room = () => {
       </div>
     );
   }
-  else if(!roomCreatedOrJoined){
+  else if (!roomCreatedOrJoined) {
     return (
       <div className='h-full flex justify-center content-center'>
         <div className='w-96 flex flex-col border bg-gray-100 m-auto justify-center p-4 rounded'>
           Welcome {user.username}!
           <div className='flex justify-center'>
-            <div className='m-2 h-0.5 w-80 bg-black'/>
+            <div className='m-2 h-0.5 w-80 bg-black' />
           </div>
-          <label>Room Name</label>
+          <label>Room Name/Code</label>
           <input type="text" value={roomName} onChange={(e) => setRoomName(e.target.value)} />
           {!roomExists && <p className='text-red-500'>Room does not exist</p>}
           <button className='mt-4 underline' onClick={createRoom}>Create Room</button>
