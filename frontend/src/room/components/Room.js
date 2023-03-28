@@ -5,6 +5,7 @@ import RoomInfo from './RoomInfo';
 import { ReactFlowProvider } from 'reactflow';
 import { Doc } from 'yjs'
 import { WebrtcProvider } from 'y-webrtc'
+import PayButton from './PayButton';
 import AuthButton from '../../flowboard/components/button/AuthButton';
 import apiService from '../../services/apiService';
 import roomService from '../services/RoomService';
@@ -115,6 +116,7 @@ const Room = () => {
           {!roomExists && <p className='text-red-500'>Room does not exist</p>}
           <button className='mt-4 underline' onClick={createRoom}>Create Room</button>
           <button className='mt-2 underline' onClick={joinRoom}>Join Room</button>
+          <PayButton/>
         </div>
       </div>
     );
