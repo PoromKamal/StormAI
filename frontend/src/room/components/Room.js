@@ -29,7 +29,7 @@ const Room = () => {
   const [yjsProvider, setYjsProvider] = useState(null);
   const [yDoc, setYDoc] = useState(null);
   const [user, setUser] = useState({ authenticated: false });
-  
+
   useEffect(() => {
     apiService.getMe().then((response) => {
       let user = {};
@@ -42,7 +42,6 @@ const Room = () => {
   });
   }, [])
 
-  
 
   const createRoom = () => {
     const doc = new Doc();

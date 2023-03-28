@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FaRegStickyNote, FaPen, FaCog } from 'react-icons/fa';
+import AiDropdownButton from './button/AiDropdownButton';
 import Settings from './Settings';
 
 const onDragStart = (event, nodeType) => {
@@ -37,6 +38,7 @@ const Sidebar = () => {
         >
           <FaCog />
         </div>
+        <AiDropdownButton/>
       </div>
       {settingsOpen && <Settings />}
     </>

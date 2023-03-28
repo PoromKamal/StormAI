@@ -2,3 +2,5 @@
 /postgres
 /.gradle/
 /.idea/
+*.class
+/build/
