@@ -9,6 +9,7 @@ import PayButton from './PayButton';
 import AuthButton from '../../flowboard/components/button/AuthButton';
 import apiService from '../../services/apiService';
 import roomService from '../services/RoomService';
+import { useNavigate } from 'react-router-dom';
 
 export const YjsContext = createContext(null);
 
@@ -32,6 +33,10 @@ const Room = () => {
   const [yjsProvider, setYjsProvider] = useState(null);
   const [yDoc, setYDoc] = useState(null);
   const [user, setUser] = useState({ authenticated: false });
+  const navigate = useNavigate();
+  const handleButtonClick = () => {
+    navigate('/ProFeatures');
+  };
 
   useEffect(() => {
     apiService.getMe().then((response) => {
@@ -140,6 +145,7 @@ const Room = () => {
           {!roomExists && <p className='text-red-500'>Room does not exist</p>}
           <button className='mt-4 underline' onClick={createRoom}>Create Room</button>
           <button className='mt-2 underline' onClick={joinRoom}>Join Room</button>
+          <button onClick={handleButtonClick}>Go to Pro Features</button>
           <PayButton/>
         </div>
       </div>
