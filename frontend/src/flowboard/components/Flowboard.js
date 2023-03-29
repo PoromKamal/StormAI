@@ -4,15 +4,16 @@ import CanvasNode from './nodes/CanvasNode';
 import StickyNode from './nodes/StickyNode';
 import CursorNode from './nodes/CursorNode';
 import StoryNode from './nodes/StoryNode';
+import ArtistNode from './nodes/ArtistNode';
 import Sidebar from './Sidebar';
 import useNodesStateSynced from '../hooks/useNodesStateSynced';
 import useEdgesStateSynced from '../hooks/useEdgesStateSynced';
+import useFlowboardUtils from '../hooks/useFlowboardUtils';
 import { YjsContext } from '../../room/components/Room';
+import roomService from '../../room/services/RoomService';
 import { throttle } from 'lodash';
-import AiDropdownButton from './button/AiDropdownButton';
 import 'reactflow/dist/style.css';
 import styles from '../styles/style.module.css';
-import ArtistNode from './nodes/ArtistNode';
 
 const nodeTypes = {
   canvas: CanvasNode,
@@ -44,6 +45,7 @@ const defaultEdgeOptions = {
 
 const Flowboard = () => {
   const wrapperRef = useRef(null);
+  const [ prepareDocForSaving, createNodeId ] = useFlowboardUtils();
   const [nodes, onNodesChange] = useNodesStateSynced();
   const [edges, onEdgesChange, onConnect] = useEdgesStateSynced();
   const { yDoc, yjsProvider } = useContext(YjsContext);
@@ -51,12 +53,27 @@ const Flowboard = () => {
   const store = useStoreApi();
   const transform = useRef(store.getState().transform);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log('Checking if doc needs to be saved...');
+      if (yDoc) {
+        const lastUpdate = yDoc.getMap('roomInfo').get('lastUpdate');
+        const time = new Date().getTime();
+        if (!lastUpdate || time - lastUpdate > 10000) {
+          console.log('Saving doc...');
+          const roomId = yDoc.getMap('roomInfo').get('info')._id;
+          const docState = prepareDocForSaving(yDoc);
+          roomService.updateDoc(roomId, docState, time);
+        }
+      }
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
+
   // Required to get the current pan and zoom values
   useEffect(() => store.subscribe(
     state => (transform.current = state.transform)
   ), [])
-
-  const getId = () => `dndnode_${Math.random() * 10000}`;
 
   const onNodeClick = useCallback((_, node) => {
     // For debugging, can remove later
@@ -78,7 +95,7 @@ const Flowboard = () => {
       const type = event.dataTransfer.getData('application/reactflow');
       const position = project({ x: event.clientX - wrapperBounds.left - 80, y: event.clientY - wrapperBounds.top - 20 });
       const newNode = {
-        id: getId(),
+        id: createNodeId(),
         type,
         position,
         data: { label: `${type}`, paths: [] },
@@ -91,7 +108,7 @@ const Flowboard = () => {
     event.preventDefault();
     const wrapperBounds = wrapperRef.current.getBoundingClientRect();
     // Compute the position of the cursor relative to the pan and zoom values
-    const position = project({ x: (event.clientX - wrapperBounds.left - transform.current[0]) / transform.current[2], y: (event.clientY - wrapperBounds.top - transform.current[1]) / transform.current[2]});
+    const position = project({ x: (event.clientX - wrapperBounds.left - transform.current[0]) / transform.current[2], y: (event.clientY - wrapperBounds.top - transform.current[1]) / transform.current[2] });
     const user = yjsProvider.awareness.getLocalState().user;
     const cursorNode = yDoc.getMap('nodes').get(`${user.name}-cursor`);
     if (cursorNode) {
