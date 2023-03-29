@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import Flowboard from '../../flowboard/components/Flowboard';
 import RoomInfo from './RoomInfo';
 import { ReactFlowProvider } from 'reactflow';
-import { Doc } from 'yjs'
+import { Doc, applyUpdate } from 'yjs'
 import { WebrtcProvider } from 'y-webrtc'
 import PayButton from './PayButton';
 import AuthButton from '../../flowboard/components/button/AuthButton';
@@ -33,17 +33,17 @@ const Room = () => {
   const [yDoc, setYDoc] = useState(null);
   const [user, setUser] = useState({ authenticated: false });
 
-  useEffect(() => {
-    apiService.getMe().then((response) => {
-      let user = {};
-      if(response.error != null){
-          user = {"authenticated": false};
-      }else{
-          user = {"authenticated": true, "username": response.username};
-      }
-      setUser(user);
-  });
-  }, [])
+  // useEffect(() => {
+  //   apiService.getMe().then((response) => {
+  //     let user = {};
+  //     if(response.error != null){
+  //         user = {"authenticated": false};
+  //     }else{
+  //         user = {"authenticated": true, "username": response.username};
+  //     }
+  //     setUser(user);
+  // });
+  // }, [])
 
 
   const createRoom = async () => {
@@ -63,15 +63,24 @@ const Room = () => {
   };
 
   const joinRoom = async () => {
+    // Use either roomId from url or roomName from input
     const roomIdOrName = roomId || roomName;
-    const res = await roomService.getRoom(roomIdOrName);
-    console.log(res);
+    const res = await roomService.getRoomInfo(roomIdOrName);
+    // Continue if room exists
     if (!res.success) {
       setRoomExists(false);
       return;
     }
     const doc = new Doc();
     const provider = new WebrtcProvider(res.room._id, doc, { signaling: ['ws://localhost:4444'] });
+    const update = await roomService.getDoc(res.room._id);
+    const alreadyLoaded = doc.getMap('loading').get('alreadyLoaded');
+    if (!alreadyLoaded && update.doc) {
+      // If no one is in the room, apply the last state from the server
+      doc.getMap('loading').set('alreadyLoaded', true);
+      console.log('Applying update from server...')
+      applyUpdate(doc, new Uint8Array(update.doc.data));
+    }
     provider.awareness.setLocalStateField('user', { name: username, color: userColours[Math.floor(Math.random() * userColours.length)] });
     doc.getMap('roomInfo').set('info', res.room);
     setYDoc(doc);
@@ -96,8 +105,6 @@ const Room = () => {
     return (
       <div className='h-full flex justify-center content-center'>
         <div className='w-96 flex flex-col border bg-gray-100 m-auto justify-center p-4 rounded'>
-          <p>This is what it would look like if an anonymous user (user without an account) wants to use the app.
-            If they have an account and are signed in, we don't need to show the username input.</p>
           <label>Room Name/Code</label>
           <input type="text" value={roomName} onChange={(e) => setRoomName(e.target.value)} />
           <div className='flex justify-center'>

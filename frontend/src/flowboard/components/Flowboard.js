@@ -7,7 +7,10 @@ import StoryNode from './nodes/StoryNode';
 import Sidebar from './Sidebar';
 import useNodesStateSynced from '../hooks/useNodesStateSynced';
 import useEdgesStateSynced from '../hooks/useEdgesStateSynced';
+import useFlowboardUtils from '../hooks/useFlowboardUtils';
 import { YjsContext } from '../../room/components/Room';
+import { Doc, encodeStateAsUpdate } from 'yjs';
+import roomService from '../../room/services/RoomService';
 import { throttle } from 'lodash';
 import AiDropdownButton from './button/AiDropdownButton';
 import 'reactflow/dist/style.css';
@@ -44,12 +47,48 @@ const defaultEdgeOptions = {
 
 const Flowboard = () => {
   const wrapperRef = useRef(null);
+  const [ prepareDocForSaving ] = useFlowboardUtils();
   const [nodes, onNodesChange] = useNodesStateSynced();
   const [edges, onEdgesChange, onConnect] = useEdgesStateSynced();
   const { yDoc, yjsProvider } = useContext(YjsContext);
   const { project } = useReactFlow();
   const store = useStoreApi();
   const transform = useRef(store.getState().transform);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log('Checking if doc needs to be saved...');
+      if (yDoc) {
+        const lastUpdate = yDoc.getMap('roomInfo').get('lastUpdate');
+        const time = new Date().getTime();
+        if (!lastUpdate || time - lastUpdate > 10000) {
+          console.log('Saving doc...');
+          const roomId = yDoc.getMap('roomInfo').get('info')._id;
+          yDoc.getMap('roomInfo').set('lastUpdate', time);
+
+          const newDoc = new Doc();
+          yDoc.getMap('nodes').forEach((node, key) => {
+            newDoc.getMap('nodes').set(key, node);
+          });
+          // remove cursor nodes from newDoc
+          newDoc.getMap('nodes').forEach((node, key) => {
+            if (node.type === 'cursor') {
+              newDoc.getMap('nodes').delete(key);
+            }
+          });
+          yDoc.getMap('edges').forEach((edge, key) => {
+            newDoc.getMap('edges').set(key, edge);
+          });
+          yDoc.getMap('settings').forEach((setting, key) => {
+            newDoc.getMap('settings').set(key, setting);
+          });
+          const docState = encodeStateAsUpdate(newDoc);
+          roomService.updateDoc(roomId, docState, time);
+        }
+      }
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Required to get the current pan and zoom values
   useEffect(() => store.subscribe(
@@ -91,7 +130,7 @@ const Flowboard = () => {
     event.preventDefault();
     const wrapperBounds = wrapperRef.current.getBoundingClientRect();
     // Compute the position of the cursor relative to the pan and zoom values
-    const position = project({ x: (event.clientX - wrapperBounds.left - transform.current[0]) / transform.current[2], y: (event.clientY - wrapperBounds.top - transform.current[1]) / transform.current[2]});
+    const position = project({ x: (event.clientX - wrapperBounds.left - transform.current[0]) / transform.current[2], y: (event.clientY - wrapperBounds.top - transform.current[1]) / transform.current[2] });
     const user = yjsProvider.awareness.getLocalState().user;
     const cursorNode = yDoc.getMap('nodes').get(`${user.name}-cursor`);
     if (cursorNode) {
