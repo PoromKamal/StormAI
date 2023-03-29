@@ -9,6 +9,16 @@ const RoomInfo = () => {
   const [infoOpen, setInfoOpen] = useState(false);
 
   useEffect(() => {
+    const newUsers = [];
+    awareness.getStates().forEach(state => {
+      if (state.user) {
+        newUsers.push(state.user);
+      }
+    })
+    setUsers(newUsers);
+  }, []);
+
+  useEffect(() => {
     const handler = () => {
       const newUsers = [];
       awareness.getStates().forEach(state => {

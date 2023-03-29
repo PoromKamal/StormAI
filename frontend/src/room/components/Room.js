@@ -33,18 +33,17 @@ const Room = () => {
   const [yDoc, setYDoc] = useState(null);
   const [user, setUser] = useState({ authenticated: false });
 
-  // useEffect(() => {
-  //   apiService.getMe().then((response) => {
-  //     let user = {};
-  //     if(response.error != null){
-  //         user = {"authenticated": false};
-  //     }else{
-  //         user = {"authenticated": true, "username": response.username};
-  //     }
-  //     setUser(user);
-  // });
-  // }, [])
-
+  useEffect(() => {
+    apiService.getMe().then((response) => {
+      let user = {};
+      if (response.error != null){
+          user = {"authenticated": false};
+      }else{
+          user = {"authenticated": true, "username": response.username};
+      }
+      setUser(user);
+  });
+  }, [])
 
   const createRoom = async () => {
     const res = await roomService.createRoom({ name: roomName });

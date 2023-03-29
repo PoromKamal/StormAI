@@ -4,18 +4,16 @@ import CanvasNode from './nodes/CanvasNode';
 import StickyNode from './nodes/StickyNode';
 import CursorNode from './nodes/CursorNode';
 import StoryNode from './nodes/StoryNode';
+import ArtistNode from './nodes/ArtistNode';
 import Sidebar from './Sidebar';
 import useNodesStateSynced from '../hooks/useNodesStateSynced';
 import useEdgesStateSynced from '../hooks/useEdgesStateSynced';
 import useFlowboardUtils from '../hooks/useFlowboardUtils';
 import { YjsContext } from '../../room/components/Room';
-import { Doc, encodeStateAsUpdate } from 'yjs';
 import roomService from '../../room/services/RoomService';
 import { throttle } from 'lodash';
-import AiDropdownButton from './button/AiDropdownButton';
 import 'reactflow/dist/style.css';
 import styles from '../styles/style.module.css';
-import ArtistNode from './nodes/ArtistNode';
 
 const nodeTypes = {
   canvas: CanvasNode,
@@ -47,7 +45,7 @@ const defaultEdgeOptions = {
 
 const Flowboard = () => {
   const wrapperRef = useRef(null);
-  const [ prepareDocForSaving ] = useFlowboardUtils();
+  const [ prepareDocForSaving, createNodeId ] = useFlowboardUtils();
   const [nodes, onNodesChange] = useNodesStateSynced();
   const [edges, onEdgesChange, onConnect] = useEdgesStateSynced();
   const { yDoc, yjsProvider } = useContext(YjsContext);
@@ -64,25 +62,7 @@ const Flowboard = () => {
         if (!lastUpdate || time - lastUpdate > 10000) {
           console.log('Saving doc...');
           const roomId = yDoc.getMap('roomInfo').get('info')._id;
-          yDoc.getMap('roomInfo').set('lastUpdate', time);
-
-          const newDoc = new Doc();
-          yDoc.getMap('nodes').forEach((node, key) => {
-            newDoc.getMap('nodes').set(key, node);
-          });
-          // remove cursor nodes from newDoc
-          newDoc.getMap('nodes').forEach((node, key) => {
-            if (node.type === 'cursor') {
-              newDoc.getMap('nodes').delete(key);
-            }
-          });
-          yDoc.getMap('edges').forEach((edge, key) => {
-            newDoc.getMap('edges').set(key, edge);
-          });
-          yDoc.getMap('settings').forEach((setting, key) => {
-            newDoc.getMap('settings').set(key, setting);
-          });
-          const docState = encodeStateAsUpdate(newDoc);
+          const docState = prepareDocForSaving(yDoc);
           roomService.updateDoc(roomId, docState, time);
         }
       }
@@ -94,8 +74,6 @@ const Flowboard = () => {
   useEffect(() => store.subscribe(
     state => (transform.current = state.transform)
   ), [])
-
-  const getId = () => `dndnode_${Math.random() * 10000}`;
 
   const onNodeClick = useCallback((_, node) => {
     // For debugging, can remove later
@@ -117,7 +95,7 @@ const Flowboard = () => {
       const type = event.dataTransfer.getData('application/reactflow');
       const position = project({ x: event.clientX - wrapperBounds.left - 80, y: event.clientY - wrapperBounds.top - 20 });
       const newNode = {
-        id: getId(),
+        id: createNodeId(),
         type,
         position,
         data: { label: `${type}`, paths: [] },
