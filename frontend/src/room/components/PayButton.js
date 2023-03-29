@@ -10,7 +10,7 @@ const PayButton = () => {
 
     }
     return (
-        <button onClick ={()=>handleCheckout()}>Pay for PRO</button>
+        <button onClick ={()=>handleCheckout()}>Purchase StormAI Pro!</button>
     )
 
 }

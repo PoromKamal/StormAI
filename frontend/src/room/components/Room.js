@@ -122,7 +122,7 @@ const Room = () => {
           {!roomExists && <p className='text-red-500'>Room does not exist</p>}
           <button className='mt-4 underline' onClick={createRoom}>Create Room</button>
           <button className='mt-2 underline' onClick={joinRoom}>Join Room</button>
-          <PayButton/>
+          
         </div>
       </div>
     );
@@ -140,6 +140,7 @@ const Room = () => {
           {!roomExists && <p className='text-red-500'>Room does not exist</p>}
           <button className='mt-4 underline' onClick={createRoom}>Create Room</button>
           <button className='mt-2 underline' onClick={joinRoom}>Join Room</button>
+          <PayButton/>
         </div>
       </div>
     );
