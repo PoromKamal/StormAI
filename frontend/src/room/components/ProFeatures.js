@@ -1,21 +1,22 @@
 import React from 'react';
+import PayButton from './PayButton';
+//import './ProFeatures.css';
 
 const ProFeatures = () => {
-  const proFeaturesHtml = `
-    <h1>Pro Features of My App</h1>
-    <p>Upgrade to the pro version of My App to enjoy the following features:</p>
-    <ul>
-      <li>Feature 1</li>
-      <li>Feature 2</li>
-      <li>Feature 3</li>
-      <li>Feature 4</li>
-      <li>Feature 5</li>
-    </ul>
-    <p>Don't miss out on these amazing features. Upgrade now!</p>
-  `;
-
   return (
-    <div dangerouslySetInnerHTML={{ __html: proFeaturesHtml }} />
+    <div className="pro-features-container">
+      <h1 className="pro-features-title">Pro Features of My App</h1>
+      <p className="pro-features-description">Upgrade to the pro version of My App to enjoy the following features:</p>
+      <ul className="pro-features-list">
+        <li className="pro-feature">Feature 1</li>
+        <li className="pro-feature">Feature 2</li>
+        <li className="pro-feature">Feature 3</li>
+        <li className="pro-feature">Feature 4</li>
+        <li className="pro-feature">Feature 5</li>
+      </ul>
+      <p className="pro-features-upgrade">Don't miss out on these amazing features. Upgrade now!</p>
+      <PayButton />
+    </div>
   );
 };
 
