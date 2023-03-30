@@ -30,8 +30,22 @@ const useFlowboardUtils = () => {
     return `dndnode_${Math.random() * 10000}`
   };
 
+  const mapSourceToTargetHandle = (handle) => {
+    switch (handle) {
+      case 's-top':
+        return 't-bottom';
+      case 's-bottom':
+        return 't-top';
+      case 's-left':
+        return 't-right';
+      case 's-right':
+        return 't-left';
+      default:
+        return 't-top';
+    }
+  }
 
-  return [prepareDocForSaving, createNodeId];
+  return [prepareDocForSaving, createNodeId, mapSourceToTargetHandle];
 }
 
 export default useFlowboardUtils

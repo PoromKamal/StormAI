@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FaRegStickyNote, FaPen, FaCog, FaShareSquare } from 'react-icons/fa';
+import { FaRegStickyNote, FaPen, FaCog, FaShareSquare, FaSitemap } from 'react-icons/fa';
 import AiDropdownButton from './button/AiDropdownButton';
 import Settings from './Settings';
 import Invite from './Invite';
@@ -33,6 +33,13 @@ const Sidebar = () => {
           draggable
         >
           <FaRegStickyNote />
+        </div>
+        <div
+          className="w-10 h-10 bg-gray-900 text-white border-none rounded shadow-md flex justify-center items-center text-xl my-1 hover:bg-gray-700 hover:scale-110 transition-transform"
+          onDragStart={(event) => onDragStart(event, 'mindmap')}
+          draggable
+        >
+          <FaSitemap />
         </div>
         <div
           className="w-10 h-10 bg-gray-900 text-white border-none rounded shadow-md flex justify-center items-center text-xl my-1 hover:bg-gray-700 hover:scale-110 transition-transform"

@@ -1,10 +1,12 @@
 import React, { useRef, useCallback, useContext, useEffect } from 'react';
-import ReactFlow, { MarkerType, Background, Controls, useReactFlow, useStoreApi, MiniMap } from 'reactflow';
+import ReactFlow, { Background, Controls, useReactFlow, useStoreApi, MiniMap } from 'reactflow';
 import CanvasNode from './nodes/CanvasNode';
 import StickyNode from './nodes/StickyNode';
 import CursorNode from './nodes/CursorNode';
 import StoryNode from './nodes/StoryNode';
 import ArtistNode from './nodes/ArtistNode';
+import MindMapNode from './nodes/MindMapNode';
+import MindMapEdge from './edges/MindMapEdge';
 import Sidebar from './Sidebar';
 import useNodesStateSynced from '../hooks/useNodesStateSynced';
 import useEdgesStateSynced from '../hooks/useEdgesStateSynced';
@@ -20,10 +22,12 @@ const nodeTypes = {
   sticky: StickyNode,
   cursor: CursorNode,
   story: StoryNode,
-  artist: ArtistNode
+  artist: ArtistNode,
+  mindmap: MindMapNode,
 };
 
 const edgeTypes = {
+  mindmap: MindMapEdge,
 };
 
 const nodeColor = (node) => {
@@ -32,26 +36,28 @@ const nodeColor = (node) => {
       return '#004d40';
     case 'cursor':
       return '#76ff03';
+    case 'mindmap':
+      return '#30bced';
     default:
       return 'rgb(17 24 39)';
   }
 };
 
 const defaultEdgeOptions = {
-  type: 'smoothstep',
-  markerEnd: { type: MarkerType.ArrowClosed },
+  type: 'default',
   pathOptions: { offset: 5 },
 };
 
 const Flowboard = () => {
   const wrapperRef = useRef(null);
-  const [ prepareDocForSaving, createNodeId ] = useFlowboardUtils();
+  const [prepareDocForSaving, createNodeId, mapSourceToTargetHandle] = useFlowboardUtils();
   const [nodes, onNodesChange] = useNodesStateSynced();
   const [edges, onEdgesChange, onConnect] = useEdgesStateSynced();
   const { yDoc, yjsProvider } = useContext(YjsContext);
   const { project } = useReactFlow();
   const store = useStoreApi();
   const transform = useRef(store.getState().transform);
+  const connectingNodeId = useRef(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -93,6 +99,9 @@ const Flowboard = () => {
     if (wrapperRef.current) {
       const wrapperBounds = wrapperRef.current.getBoundingClientRect();
       const type = event.dataTransfer.getData('application/reactflow');
+      if (typeof type === 'undefined' || !type) {
+        return
+      };
       const position = project({ x: event.clientX - wrapperBounds.left - 80, y: event.clientY - wrapperBounds.top - 20 });
       const newNode = {
         id: createNodeId(),
@@ -103,6 +112,37 @@ const Flowboard = () => {
       yDoc.getMap('nodes').set(newNode.id, newNode);
     }
   };
+
+  const onConnectStart = useCallback((event, { nodeId }) => {
+    connectingNodeId.current = nodeId;
+    connectingNodeId.handle = event.target.getAttribute('data-handleid');
+  }, []);
+
+  const onConnectEnd = useCallback(
+    (event) => {
+      const targetIsPane = event.target.classList.contains('react-flow__pane');
+
+      if (targetIsPane) {
+        const { top, left } = wrapperRef.current.getBoundingClientRect();
+        const id = createNodeId();
+        const newNode = {
+          id,
+          type: 'mindmap',
+          position: project({ x: event.clientX - left - 75, y: event.clientY - top }),
+          data: { label: `mindmap` },
+        };
+
+        yDoc.getMap('nodes').set(newNode.id, newNode);
+        onConnect({ 
+          source: connectingNodeId.current, 
+          sourceHandle: connectingNodeId.handle, 
+          target: newNode.id, 
+          targetHandle: mapSourceToTargetHandle(connectingNodeId.handle) 
+        });
+      }
+    },
+    [project]
+  );
 
   const sendCursorData = (event) => {
     event.preventDefault();
@@ -144,6 +184,8 @@ const Flowboard = () => {
           onNodesChange={onNodesChange}
           onNodeClick={onNodeClick}
           onConnect={onConnect}
+          onConnectStart={onConnectStart}
+          onConnectEnd={onConnectEnd}
           onDrop={onDrop}
           onDragOver={onDragOver}
           defaultEdgeOptions={defaultEdgeOptions}
