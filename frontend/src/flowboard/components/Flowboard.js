@@ -1,5 +1,5 @@
 import React, { useRef, useCallback, useContext, useEffect } from 'react';
-import ReactFlow, { Background, Controls, useReactFlow, useStoreApi, MiniMap } from 'reactflow';
+import ReactFlow, { MarkerType, Background, Controls, useReactFlow, useStoreApi, MiniMap } from 'reactflow';
 import CanvasNode from './nodes/CanvasNode';
 import StickyNode from './nodes/StickyNode';
 import CursorNode from './nodes/CursorNode';
@@ -45,12 +45,13 @@ const nodeColor = (node) => {
 
 const defaultEdgeOptions = {
   type: 'default',
+  markerEnd: { type: MarkerType.ArrowClosed },
   pathOptions: { offset: 5 },
 };
 
 const Flowboard = () => {
   const wrapperRef = useRef(null);
-  const [prepareDocForSaving, createNodeId, mapSourceToTargetHandle] = useFlowboardUtils();
+  const [prepareDocForSaving, mapSourceToTargetHandle, createNewNode] = useFlowboardUtils();
   const [nodes, onNodesChange] = useNodesStateSynced();
   const [edges, onEdgesChange, onConnect] = useEdgesStateSynced();
   const { yDoc, yjsProvider } = useContext(YjsContext);
@@ -102,14 +103,11 @@ const Flowboard = () => {
       if (typeof type === 'undefined' || !type) {
         return
       };
-      const position = project({ x: event.clientX - wrapperBounds.left - 80, y: event.clientY - wrapperBounds.top - 20 });
-      const newNode = {
-        id: createNodeId(),
-        type,
-        position,
-        data: { label: `${type}`, paths: [] },
-      };
-      yDoc.getMap('nodes').set(newNode.id, newNode);
+      const xy = { x: event.clientX - wrapperBounds.left, y: event.clientY - wrapperBounds.top };
+      const newNode = createNewNode(type, xy);
+      if (newNode) {
+        yDoc.getMap('nodes').set(newNode.id, newNode);
+      }
     }
   };
 
@@ -121,28 +119,21 @@ const Flowboard = () => {
   const onConnectEnd = useCallback(
     (event) => {
       const targetIsPane = event.target.classList.contains('react-flow__pane');
-
       if (targetIsPane) {
-        const { top, left } = wrapperRef.current.getBoundingClientRect();
-        const id = createNodeId();
-        const newNode = {
-          id,
-          type: 'mindmap',
-          position: project({ x: event.clientX - left - 75, y: event.clientY - top }),
-          data: { label: `mindmap` },
-        };
-
-        yDoc.getMap('nodes').set(newNode.id, newNode);
-        onConnect({ 
-          source: connectingNodeId.current, 
-          sourceHandle: connectingNodeId.handle, 
-          target: newNode.id, 
-          targetHandle: mapSourceToTargetHandle(connectingNodeId.handle) 
-        });
+        const wrapperBounds = wrapperRef.current.getBoundingClientRect();
+        const xy = { x: event.clientX - wrapperBounds.left, y: event.clientY - wrapperBounds.top };
+        const newNode = createNewNode('mindmap', xy);
+        if (newNode) {
+          yDoc.getMap('nodes').set(newNode.id, newNode);
+          onConnect({
+            source: connectingNodeId.current,
+            sourceHandle: connectingNodeId.handle,
+            target: newNode.id,
+            targetHandle: mapSourceToTargetHandle(connectingNodeId.handle)
+          });
+        }
       }
-    },
-    [project]
-  );
+    }, []);
 
   const sendCursorData = (event) => {
     event.preventDefault();
@@ -157,13 +148,7 @@ const Flowboard = () => {
         position,
       });
     } else {
-      const newNode = {
-        id: `${user.name}-cursor`,
-        type: 'cursor',
-        position,
-        data: { label: `${user.name}`, cursor: { name: user.name, color: user.color } },
-        zIndex: 1000,
-      };
+      const newNode = createNewNode('cursor', position, { user });
       yDoc.getMap('nodes').set(newNode.id, newNode);
     }
   }

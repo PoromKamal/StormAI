@@ -4,7 +4,6 @@ import { Handle, Position } from 'reactflow'
 
 const MindMapNode = ({ id, data }) => {
   const [showHandles, setShowHandles] = useState(true);
-  const [dragging, setDragging] = useState(false);
   const { yDoc } = useContext(YjsContext);
 
   // Hide handles after 3s
@@ -31,8 +30,8 @@ const MindMapNode = ({ id, data }) => {
 
   return (
     <div>
-      <div onClick={toggleHandles} className='inputWrapper bg-gray-200 h-24 p-3 border rounded flex'>
-        <input className='text-black nodrag' value={data.label} onChange={onChange} spellCheck={false} />
+      <div onClick={toggleHandles} className='bg-green-200 h-16 p-3 border border-green-400 rounded-3xl flex'>
+        <input className='text-black text-lg nodrag bg-transparent w-full focus:outline-none rounded-2xl focus:placeholder-transparent text-center' value={data.label} onChange={onChange} spellCheck={false} />
       </div>
       {showHandles && (
         <>

@@ -1,0 +1,77 @@
+.sticky {
+  box-shadow: 5px 5px 7px rgba(33, 33, 33, .7);
+  transition: transform .1s linear;
+}
+
+.sticky:hover {
+  box-shadow: 10px 10px 7px rgba(0, 0, 0, .6);
+  transform: scale(1.1);
+  position: relative;
+  z-index: 5
+}
+
+.sticky ::-webkit-scrollbar {
+  width: 5px;
+  cursor: pointer
+}
+
+.sticky ::-webkit-scrollbar-track {
+  background: transparent; 
+}
+ 
+.sticky ::-webkit-scrollbar-thumb {
+  background: #555; 
+  border-radius: 10px;
+}
+
+.sticky ::-webkit-scrollbar-thumb:hover {
+  background: #888; 
+}
+
+.rotate-6 {
+  transform: rotate(-6deg);
+}
+
+.rotate-5 {
+  transform: rotate(-5deg);
+}
+
+.rotate-4 {
+  transform: rotate(-4deg);
+}
+
+.rotate-3 {
+  transform: rotate(-3deg);
+}
+
+.rotate-2 {
+  transform: rotate(-2deg);
+}
+
+.rotate-1 {
+  transform: rotate(-1deg);
+}
+
+.rotate1 {
+  transform: rotate(1deg);
+}
+
+.rotate2 {
+  transform: rotate(2deg);
+}
+
+.rotate3 {
+  transform: rotate(3deg);
+}
+
+.rotate4 {
+  transform: rotate(4deg);
+}
+
+.rotate5 {
+  transform: rotate(5deg);
+}
+
+.rotate6 {
+  transform: rotate(6deg);
+}

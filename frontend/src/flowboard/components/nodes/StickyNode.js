@@ -1,5 +1,6 @@
 import { useCallback, useContext } from 'react'
 import { YjsContext } from '../../../room/components/Room';
+import '../../styles/nodes.css';
 
 const StickyNode = ({ id, data }) => {
   const { yDoc } = useContext(YjsContext);
@@ -8,20 +9,18 @@ const StickyNode = ({ id, data }) => {
     const currentNode = yDoc.getMap('nodes').get(id);
     yDoc.getMap('nodes').set(id, {
       ...currentNode,
-      data: { label: e.target.value },
+      data: { text: e.target.value },
     });
   }, [])
 
   return (
-    <div className='bg-gray-200 h-48 w-48 p-3 border rounded flex' style={{
-      transition: "transform 1s linear",
-    }}>
+    <div className={`sticky rotate${data.angle} bg-yellow-200 h-56 w-56 p-3 flex`}>
       <textarea
-        value={data.label}
+        value={data.text}
         spellCheck={false}
         placeholder="Enter text..."
         onChange={onChange}
-        className="textarea w-full bg-transparent text-black nodrag focus:bg-gray-100 focus:outline-none rounded"
+        className="stickyText textarea w-full bg-transparent text-gray-700 nodrag focus:bg-yellow-100 focus:outline-none rounded"
       />
     </div>
   )
