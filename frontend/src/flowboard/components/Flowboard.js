@@ -33,11 +33,11 @@ const edgeTypes = {
 const nodeColor = (node) => {
   switch (node.type) {
     case 'sticky':
-      return '#004d40';
+      return 'rgb(254 240 138)';
     case 'cursor':
       return '#76ff03';
     case 'mindmap':
-      return '#30bced';
+      return 'rgb(187 247 208)';
     default:
       return 'rgb(17 24 39)';
   }
@@ -121,7 +121,7 @@ const Flowboard = () => {
       const targetIsPane = event.target.classList.contains('react-flow__pane');
       if (targetIsPane) {
         const wrapperBounds = wrapperRef.current.getBoundingClientRect();
-        const xy = { x: event.clientX - wrapperBounds.left, y: event.clientY - wrapperBounds.top };
+        const xy = project({ x: (event.clientX - wrapperBounds.left - transform.current[0]) / transform.current[2], y: (event.clientY - wrapperBounds.top - transform.current[1]) / transform.current[2] });
         const newNode = createNewNode('mindmap', xy);
         if (newNode) {
           yDoc.getMap('nodes').set(newNode.id, newNode);

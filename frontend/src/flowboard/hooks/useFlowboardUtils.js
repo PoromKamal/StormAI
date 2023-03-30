@@ -86,7 +86,7 @@ const useFlowboardUtils = () => {
       id: createNodeId(),
       type: 'sticky',
       position: project({ x: x - 112, y: y - 112 }),
-      data: { text: 'Enter text...', angle: computeRandom(-6, 6) },
+      data: { text: '', color: 'yellow', angle: computeRandom(-6, 6) },
     };
   }
 
@@ -94,8 +94,8 @@ const useFlowboardUtils = () => {
     return {
       id: createNodeId(),
       type: 'mindmap',
-      position: project({ x: x - 172, y: y - 32 }),
-      data: { label: 'Enter text...' },
+      position: project({ x: x - 132, y: y - 32 }),
+      data: { label: '', color: 'green' },
     };
   }
 
