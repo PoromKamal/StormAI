@@ -5,7 +5,6 @@ import RoomInfo from './RoomInfo';
 import { ReactFlowProvider } from 'reactflow';
 import { Doc, applyUpdate } from 'yjs'
 import { WebrtcProvider } from 'y-webrtc'
-import PayButton from './PayButton';
 import AuthButton from '../../flowboard/components/button/AuthButton';
 import apiService from '../../services/apiService';
 import roomService from '../services/RoomService';
@@ -146,7 +145,6 @@ const Room = () => {
           <button className='mt-4 underline' onClick={createRoom}>Create Room</button>
           <button className='mt-2 underline' onClick={joinRoom}>Join Room</button>
           <button onClick={handleButtonClick}>Go to Pro Features</button>
-          <PayButton/>
         </div>
       </div>
     );
