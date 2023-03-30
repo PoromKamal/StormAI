@@ -29,7 +29,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().and().authorizeRequests()
             // allow all users to access the home pages and the static images directory
-            .mvcMatchers("/", "/images/**", "/getMe").permitAll()
+            .mvcMatchers("/", "/images/**", "/getMe", "/upgradeUser").permitAll()
             // all other requests must be authenticated
             .anyRequest().authenticated()
             .and().oauth2Login()

@@ -5,10 +5,10 @@ import RoomInfo from './RoomInfo';
 import { ReactFlowProvider } from 'reactflow';
 import { Doc, applyUpdate } from 'yjs'
 import { WebrtcProvider } from 'y-webrtc'
-import PayButton from './PayButton';
 import AuthButton from '../../flowboard/components/button/AuthButton';
 import apiService from '../../services/apiService';
 import roomService from '../services/RoomService';
+import { useNavigate } from 'react-router-dom';
 import StormLogo from './StormLogo';
 import NavBar from './NavBar';
 
@@ -133,7 +133,6 @@ const Room = () => {
                 </>
             }
             
-
           </div>
           
           {
