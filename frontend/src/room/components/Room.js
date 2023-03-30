@@ -34,10 +34,6 @@ const Room = () => {
   const [yjsProvider, setYjsProvider] = useState(null);
   const [yDoc, setYDoc] = useState(null);
   const [user, setUser] = useState({ authenticated: false });
-  const navigate = useNavigate();
-  const handleButtonClick = () => {
-    navigate('/ProFeatures');
-  };
 
   useEffect(() => {
     apiService.getMe().then((response) => {

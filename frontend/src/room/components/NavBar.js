@@ -2,10 +2,13 @@ import axios from "axios"
 import { RiThunderstormsFill } from "react-icons/ri"
 import { useState, useEffect } from "react"
 import apiService from "../../services/apiService"
+import { useNavigate } from 'react-router-dom';
 
 const NavBar = () => {
     const [user, setUser] = useState({"authenticated": false});
     const [hover, setHover] = useState(false);
+    const navigate = useNavigate();
+  
     useEffect(() => {
         apiService.getMe().then((response) => {
             let user = {};
@@ -17,6 +20,11 @@ const NavBar = () => {
             setUser(user);
         })
     }, []);
+
+    const handlePricingClick = () => {
+        navigate('/ProFeatures');
+      };
+    
 
     const handleEnter = () => {
         setHover(true)
@@ -30,7 +38,8 @@ const NavBar = () => {
 
     return (
         <div className="right-10 top-0 flex flex-col absolute z-10 font-Lato text-2xl mt-12 font-bold text-storm-blue">
-            <div className={`transition-all hover:font-extrabold hover:scale-x-110 cursor-pointer ${animateText}`}>
+            <div className={`transition-all hover:font-extrabold hover:scale-x-110 cursor-pointer ${animateText}`}
+                onClick={handlePricingClick}>
                 PRICING \
             </div>
             <div className={`transition-all my-10 hover:font-extrabold hover:scale-x-110 cursor-pointer ${animateText}`}>

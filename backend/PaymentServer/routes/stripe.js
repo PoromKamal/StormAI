@@ -1,9 +1,7 @@
-const React = require('react');
-const { useState, useEffect } = React;
 const express = require("express");
 const Stripe = require("stripe");
 require("dotenv").config();
-const stripe = Stripe('sk_test_51Mo85AIVRL6VSZLJkWpWUVS8yyZmYyXkXEho6IQbKKdKgzHe7z4oS0uzwbiKy5JOhMxI7T7FeVyMalX1P2Chl7F0002qEkw34C');;
+const stripe = Stripe(''); // Add your Stripe Secret Key here
 const router = express.Router();
 
 router.post('/create-checkout-session', async (req, res) => {
