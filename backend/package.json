@@ -1,0 +1,13 @@
+{  
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-dev": "concurrently \"npm run start-node\" \"npm run start-room\"  \"npm run start-signaling\"  \"npm run start-payment\" ",
+    "start-node": "cd NodeServer && npm i && npm run start",
+    "start-room": "cd RoomServer && npm i && npm run start",
+    "start-signaling": "cd SignalingServer && npm i && npm run start",
+    "start-payment": "cd PaymentServer && npm i && npm run start"
+  },
+  "dependencies": {
+    "concurrently": "^8.0.1"
+  }
+}

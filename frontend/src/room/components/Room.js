@@ -9,6 +9,8 @@ import AuthButton from '../../flowboard/components/button/AuthButton';
 import apiService from '../../services/apiService';
 import roomService from '../services/RoomService';
 import { useNavigate } from 'react-router-dom';
+import StormLogo from './StormLogo';
+import NavBar from './NavBar';
 
 export const YjsContext = createContext(null);
 
@@ -52,6 +54,7 @@ const Room = () => {
   const createRoom = async () => {
     const res = await roomService.createRoom({ name: roomName });
     if (!res.success) {
+      console.log("unable to create room");
       return;
     }
     console.log(res);
@@ -91,68 +94,80 @@ const Room = () => {
     setRoomCreatedOrJoined(true);
   };
 
-  if (!roomCreatedOrJoined && roomId) {
-    return (
-      <div className='h-full flex justify-center content-center'>
-        <div className='w-96 flex flex-col border bg-gray-100 m-auto justify-center p-4 rounded'>
-          <p>You've been invited to:</p>
-          <p className='text-2xl'>{roomId}</p>
-          <label className='mt-2'>Username</label>
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-          {!roomExists && <p className='text-red-500'>Sorry! That room does not exist</p>}
-          <button className='mt-4 underline' onClick={joinRoom}>Join Room</button>
+  const horizontalLine = (<div className='mx-32 my-3 rounded-lg h-1 bg-black'/>)
+  const animateText = "hover:animate-text hover:bg-gradient-to-r from-blue-900 via-indigo-500 to-cyan-400 hover:text-white"
+
+  if(!roomCreatedOrJoined){
+    return(
+      <div className='h-full flex flex-col justify-center'>
+        <StormLogo />
+        <NavBar/>
+        <div className='h-20 ml-32 text-6xl font-semibold text-storm-blue animate-introText animate-text bg-gradient-to-r from-blue-900 via-indigo-500 to-cyan-400 bg-clip-text text-transparent'>
+          Get started with AI Powered Productivity.
         </div>
-      </div>
-    )
-  } else if (!roomCreatedOrJoined && !user.authenticated) {
-    return (
-      <div className='h-full flex justify-center content-center'>
-        <div className='w-96 flex flex-col border bg-gray-100 m-auto justify-center p-4 rounded'>
-          <label>Room Name/Code</label>
-          <input type="text" value={roomName} onChange={(e) => setRoomName(e.target.value)} />
-          <div className='flex justify-center'>
-            <div className='m-5 h-0.5 w-80 bg-black' />
-          </div>
-          <h1 className="font-bold text-center">Continue Anonymous: </h1>
 
-          <label>Username</label>
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+        {horizontalLine}
 
-          <h1 className="font-bold text-center">or</h1>
-          <a className='mt-4 underline text-center font-bold' href={`${process.env.REACT_APP_AUTH_SERVER}/oauth2/authorization/auth0`}>Login/Signup</a>
-          <div className='flex justify-center'>
-            <div className='m-5 h-0.5 w-80 bg-black' />
+        <div className='flex flex-col justify-evenly text-2xl font-semibold text-storm-blue mx-auto'>
+          <div className='w-full flex gap-6 mt-10'>
+            
+            {
+              roomId ? 
+                <>
+                  <div>
+                    You've been invited to: 
+                    <p className='text-2xl'>{roomId}</p>
+                  </div>
+                </> : 
+                <input class="w-fit text-3xl border border-solid border-2 rounded-md font-semibold p-1" type="text" placeholder='Enter room name' value={roomName} onChange={(e) => setRoomName(e.target.value)} />
+            }
+            
+            {
+              user.authenticated ?
+                "":
+                <>
+                  <div>
+                    as
+                  </div>
+                  <input class="w-fit text-3xl border border-solid border-2 rounded-md font-semibold p-1" 
+                    type="text" 
+                    placeholder='Enter username' 
+                    value={username} 
+                    onChange={(e) => setUsername(e.target.value)} />
+                </>
+            }
+            
           </div>
-          {!roomExists && <p className='text-red-500'>Room does not exist</p>}
-          <button className='mt-4 underline' onClick={createRoom}>Create Room</button>
-          <button className='mt-2 underline' onClick={joinRoom}>Join Room</button>
           
-        </div>
-      </div>
-    );
-  }
-  else if (!roomCreatedOrJoined) {
-    return (
-      <div className='h-full flex justify-center content-center'>
-        <div className='w-96 flex flex-col border bg-gray-100 m-auto justify-center p-4 rounded'>
-          Welcome {user.username}!
-          <div className='flex justify-center'>
-            <div className='m-2 h-0.5 w-80 bg-black' />
-          </div>
-          <label>Room Name/Code</label>
-          <input type="text" value={roomName} onChange={(e) => setRoomName(e.target.value)} />
-          {!roomExists && <p className='text-red-500'>Room does not exist</p>}
-          <button className='mt-4 underline' onClick={createRoom}>Create Room</button>
-          <button className='mt-2 underline' onClick={joinRoom}>Join Room</button>
-          <button onClick={handleButtonClick}>Get StormAI Pro!</button>
-        </div>
-      </div>
-    );
-  }
+          {
+            roomId ?
+              <>
+              </> :            
+              <>
+                <button className={`mx-auto w-fit mt-10 border-solid border-2 rounded-xl font-semibold p-3  ${animateText}`}
+                  onClick={createRoom}>
+                  Create Room
+                </button>
+                <div className="mx-auto my-1">
+                  or
+                </div>
+              </>
+          }
 
+          <button className={`mx-auto w-fit border-solid border-2 rounded-xl font-semibold p-3  ${animateText}`} 
+            onClick={joinRoom}>
+            Join Room
+          </button>
+          {!roomExists && <p className='mx-auto font-semibold text-red-500'>Room does not exist</p>}
+        </div>
+      </div>
+      )
+  }
+  
   return (
     <>
       <YjsContext.Provider value={{ yDoc, yjsProvider }}>
+        <StormLogo/>
         <RoomInfo />
         <AuthButton />
         <ReactFlowProvider>
