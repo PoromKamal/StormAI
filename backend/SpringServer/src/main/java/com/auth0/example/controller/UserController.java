@@ -8,6 +8,7 @@ import com.auth0.example.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -27,11 +28,13 @@ public record UserController(UserService userService){
 
 
   @GetMapping("/upgradeUser")
-  public User upgradeUser(HttpServletResponse response) {
+  public RedirectView upgradeUser(HttpServletResponse response) {
     // Extract the email from the metadata
     User user = userService.getMe();
-            user = userService.upgradeUser(user);
-    return user;
+    user = userService.upgradeUser(user);
+    RedirectView redirectView = new RedirectView();
+    redirectView.setUrl("http://localhost:3000");
+    return redirectView;
   }
 
   @GetMapping("/test")
