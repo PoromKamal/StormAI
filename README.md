@@ -5,6 +5,9 @@
 - Project title: StormAI
 - Team name: Ctrl-Alt-Defeat
 
+## Demo Video:
+https://www.youtube.com/watch?v=w_CINQVXP3g
+
 ## Your focus (frontend focused or backend focused)
 
 Frontend focused.<br />
