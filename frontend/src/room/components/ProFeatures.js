@@ -3,6 +3,7 @@ import { useState, createContext, useEffect } from 'react';
 import PayButton from './PayButton';
 import './ProFeatures.css';
 import apiService from '../../services/apiService';
+import StormLogo from './StormLogo';
 
 const ProFeatures = () => {
   const [user, setUser] = useState({ authenticated: false });
@@ -20,6 +21,7 @@ const ProFeatures = () => {
   return (
     
     <div className="pro-features-container">
+      <StormLogo/>
       <h1 className="pro-features-title h-20 text-6xl font-semibold text-storm-blue animate-introText animate-text 
       bg-gradient-to-r from-blue-900 via-indigo-500 to-cyan-400 bg-clip-text text-transparent">StormAI PRO</h1>
       <p className="pro-features-description">Upgrade to the pro version of Storm AI to enjoy the following features:</p>
