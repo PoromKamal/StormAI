@@ -8,7 +8,7 @@
 ## Your focus (frontend focused or backend focused)
 
 Frontend focused.<br />
-This is because we want our users to have an excellent experience while whiteboarding/brainstorming on our platoform.
+This is because we want our users to have an excellent experience while whiteboarding/brainstorming on our platform.
 
 ## Team members with student numbers
 
@@ -33,7 +33,7 @@ This platform will revolutionize the way teams collaborate, and brainstorm, as i
 - Auth0: Secure access for everyone. But not just anyone (1 complexity point)<br/>
 - Stripe | Payment Processing Platform for the Internet (2 complexity points)
 - OpenAI API (1 complexity point)
-- bigscience/bloom API (3 complexity points)
+- bigscience/bloom API (1 complexity point)
 - React Flow  (2 complexity points)
 - Yjs (3 complexity points)
 
