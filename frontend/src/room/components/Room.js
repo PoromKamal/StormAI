@@ -57,7 +57,7 @@ const Room = () => {
     const doc = new Doc();
     const provider = new WebrtcProvider(res.room._id, doc, { signaling: ['ws://localhost:4444'] });
     provider.awareness.setLocalStateField('user', { name: username, color: userColours[Math.floor(Math.random() * userColours.length)] });
-    doc.getMap('settings').set('variant', 'lines');
+    doc.getMap('settings').set('variant', 'dots');
     doc.getMap('roomInfo').set('info', res.room);
     setYDoc(doc);
     setYjsProvider(provider);
@@ -115,7 +115,7 @@ const Room = () => {
                     <p className='text-2xl'>{roomId}</p>
                   </div>
                 </> : 
-                <input class="w-fit text-3xl border border-solid border-2 rounded-md font-semibold p-1" type="text" placeholder='Enter room name' value={roomName} onChange={(e) => setRoomName(e.target.value)} />
+                <input className="w-fit text-3xl border border-solid border-2 rounded-md font-semibold p-1" type="text" placeholder='Enter room name' value={roomName} onChange={(e) => setRoomName(e.target.value)} />
             }
             
             {
@@ -125,7 +125,7 @@ const Room = () => {
                   <div>
                     as
                   </div>
-                  <input class="w-fit text-3xl border border-solid border-2 rounded-md font-semibold p-1" 
+                  <input className="w-fit text-3xl border border-solid border-2 rounded-md font-semibold p-1" 
                     type="text" 
                     placeholder='Enter username' 
                     value={username} 
