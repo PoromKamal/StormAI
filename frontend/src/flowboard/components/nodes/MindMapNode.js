@@ -54,23 +54,19 @@ const MindMapNode = ({ id, data }) => {
   const getBorderColor = (color) => {
     switch (color) {
       case 'red':
-        return 'border-red-200';
+        return 'border-red-400';
       case 'orange':
-        return 'border-orange-200';
+        return 'border-orange-400';
       case 'yellow':
-        return 'border-yellow-200';
+        return 'border-yellow-400';
       case 'green':
-        return 'border-green-200';
+        return 'border-green-400';
       case 'cyan':
-        return 'border-cyan-200';
+        return 'border-cyan-400';
       case 'indigo':
-        return 'border-indigo-200';
+        return 'border-indigo-400';
     }
   }
-
-  const toggleHandles = useCallback(() => {
-    setShowHandles(!showHandles);
-  }, [showHandles])
 
   return (
     <div>
