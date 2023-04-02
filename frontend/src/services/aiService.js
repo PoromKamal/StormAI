@@ -13,7 +13,7 @@ export default class apiService{
                 "length_penalty": 0.0
             },
             "options": {
-                "use_cache": false,
+                "use_cache": true,
                 "wait_for_model": false
             }
         }
@@ -34,7 +34,7 @@ export default class apiService{
         return fetch(`${process.env.REACT_APP_ARTIST_BOT_SERVER}`, {
             method: 'POST',
             headers: {
-                "Authorization": `Bearer ${process.env.REACT_APP_HUGGINGFACE_TOKEN}`
+                "Authorization": `Bearer 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`
             },
             body: JSON.stringify(prompt)
         }).then((response) =>{
