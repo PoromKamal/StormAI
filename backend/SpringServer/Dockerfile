@@ -16,6 +16,5 @@ COPY ./ .
 RUN chmod +x gradlew
 RUN ./gradlew build
 COPY ./ .
-
-COPY /build/libs/SpringServer-0.0.1-SNAPSHOT.jar app.jar
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+#COPY /build/libs/SpringServer-0.0.1-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java", "-jar", "/app/build/libs/SpringServer-0.0.1-SNAPSHOT.jar"]
