@@ -13,6 +13,7 @@ RUN microdnf install findutils
 EXPOSE 5500
 WORKDIR /app
 COPY ./ .
+RUN chmod +x gradlew
 RUN ./gradlew clean build
 COPY /build/libs/SpringServer-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java", "-jar", "/app.jar"]
