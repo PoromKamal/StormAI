@@ -6,8 +6,8 @@ on:
       - main
       - dev
 
-env:
-  IMAGE_NAME: frontend-poromkamal
+env: 
+  IMAGE_NAME: stormai-frontend
 
 jobs:
   push:
