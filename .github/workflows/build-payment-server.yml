@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - main
-    paths:
-      - backend/PaymentServer/**
+
 
 env: 
   IMAGE_NAME: stormai-payment-server

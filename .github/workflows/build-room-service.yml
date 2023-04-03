@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - main
-    paths:
-      - backend/RoomServer/**
+
 
 env: 
   IMAGE_NAME: stormai-room-server
