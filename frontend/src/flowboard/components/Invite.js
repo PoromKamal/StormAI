@@ -17,7 +17,7 @@ const Invite = () => {
         Or share the link below:
       </p>
       <p className='text-sm leading-relaxed mb-1 break-all'>
-        {`http://localhost:3000/invite/${yDoc.getMap('roomInfo').get('info')._id}`}
+        {`${process.env.REACT_APP_MAIN}/invite/${yDoc.getMap('roomInfo').get('info')._id}`}
       </p>
     </div>
   )

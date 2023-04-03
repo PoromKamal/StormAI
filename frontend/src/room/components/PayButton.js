@@ -20,7 +20,7 @@ const PayButton = () => {
         
         const email = user.email;
         console.log("EMAIL:", email);
-        axios.post('http://localhost:3001/api/stripe/create-checkout-session', { email: user.email }).then((res)=>{
+        axios.post(`${process.env.REACT_APP_PAYMENT_SERVER}/api/stripe/create-checkout-session`, { email: user.email }).then((res)=>{
             if(res.data.url){
                 window.location.href = res.data.url;     
             }
