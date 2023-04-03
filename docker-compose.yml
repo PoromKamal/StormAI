@@ -1,12 +1,37 @@
 services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./certs:/etc/nginx/certs 
+      - ./vhost:/etc/nginx/vhost.d 
+      - ./html:/usr/share/nginx/html
+  nginx-proxy-acme:
+    image: nginxproxy/acme-companion
+    container_name: nginx-proxy-acme
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./certs:/etc/nginx/certs
+      - ./vhost:/etc/nginx/vhost.d
+      - ./html:/usr/share/nginx/html
+      - ./acme:/etc/acme.sh
+    environment:
+        - NGINX_PROXY_CONTAINER=nginx-proxy
+        - DEFAULT_EMAIL=porom.kamal@mail.utoronto.ca
+
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: ghcr.io/uoft-utsc-cs-sandbox/stormai-frontend
     container_name: frontend
     expose:
       - 80
     restart: always
+    environment:
+      - VIRTUAL_HOST=stormai.live
+      - LETSENCRYPT_HOST=stormai.live
 
   postgres:
     container_name: postgres
