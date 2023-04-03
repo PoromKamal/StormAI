@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9472ad29-d2c4-4504-a932-ca6c49a7b175" name="Changes" comment="Implemented cors config, and UI for login state.">
+    <list default="true" id="9472ad29-d2c4-4504-a932-ca6c49a7b175" name="Changes" comment="Added modified build script, and commit build folder to test">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +110,14 @@
       <option name="project" value="LOCAL" />
       <updated>1678892044213</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Added modified build script, and commit build folder to test">
+      <created>1680507751208</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1680507751208</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -131,6 +137,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Implemented Authentication service" />
     <MESSAGE value="Implemented cors config, and UI for login state." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented cors config, and UI for login state." />
+    <MESSAGE value="Added modified build script, and commit build folder to test" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added modified build script, and commit build folder to test" />
   </component>
 </project>
