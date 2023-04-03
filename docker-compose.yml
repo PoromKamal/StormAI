@@ -41,6 +41,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/stormai
       - VIRTUAL_HOST=auth.stormai.live
       - LETSENCRYPT_HOST=auth.stormai.live
+      - SPRING_REDIRECT_URL = https://stormai.live
     expose:
       - 5500
     depends_on:
