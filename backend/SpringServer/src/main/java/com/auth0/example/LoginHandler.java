@@ -41,7 +41,7 @@ public class LoginHandler implements AuthenticationSuccessHandler{
     String email = getEmail((OAuth2AuthenticationToken) authentication);
     String username = getName((OAuth2AuthenticationToken) authentication);
     userService.registerUser(email, username, 0);
-    String redirect_url = env.getProperty("redirect_url");
+    String redirect_url = env.getProperty("spring.redirect.url");
     response.sendRedirect(redirect_url);
   }
 
