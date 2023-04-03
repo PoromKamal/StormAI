@@ -55,7 +55,9 @@ const Room = () => {
     }
     console.log(res);
     const doc = new Doc();
-    const provider = new WebrtcProvider(res.room._id, doc, { signaling: ['ws://localhost:4444'] });
+    //If in production set signaling to ['wss://signaling.yjs.dev']
+    let signalingServer =  process.env.NODE_ENV === 'production' ? ['wss://signaling.stormai.live'] : ['ws://localhost:4444'];
+    const provider = new WebrtcProvider(res.room._id, doc, { signaling: signalingServer });
     provider.awareness.setLocalStateField('user', { name: username, color: userColours[Math.floor(Math.random() * userColours.length)] });
     doc.getMap('settings').set('variant', 'dots');
     doc.getMap('roomInfo').set('info', res.room);
@@ -74,7 +76,8 @@ const Room = () => {
       return;
     }
     const doc = new Doc();
-    const provider = new WebrtcProvider(res.room._id, doc, { signaling: ['ws://localhost:4444'] });
+    let signalingServer =  process.env.NODE_ENV === 'production' ? ['wss://signaling.stormai.live'] : ['ws://localhost:4444'];
+    const provider = new WebrtcProvider(res.room._id, doc, { signaling: signalingServer });
     const update = await roomService.getDoc(res.room._id);
     const alreadyLoaded = doc.getMap('loading').get('alreadyLoaded');
     if (!alreadyLoaded && update.doc) {
