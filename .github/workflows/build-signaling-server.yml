@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - main
-
+    paths:
+      - backend/SignalingServer/**
 
 env: 
   IMAGE_NAME: stormai-signaling-server
