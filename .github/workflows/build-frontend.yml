@@ -6,7 +6,7 @@ on:
       - main
       - dev
 
-end:
+env:
   IMAGE_NAME: frontend-stormai
 
 jobs:
