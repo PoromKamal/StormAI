@@ -7,7 +7,7 @@ on:
       - dev
 
 env:
-  IMAGE_NAME: frontend-stormai
+  IMAGE_NAME: stormai-poromkamal
 
 jobs:
   push:
