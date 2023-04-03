@@ -7,7 +7,7 @@ on:
       - dev
 
 env:
-  IMAGE_NAME: stormai-poromkamal
+  IMAGE_NAME: frontend-poromkamal
 
 jobs:
   push:
