@@ -1,4 +1,4 @@
-name: Build signaling server
+name: Build Node Server
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 
 env: 
-  IMAGE_NAME: stormai-signaling-server
+  IMAGE_NAME: stormai-node-server
 
 jobs:
   push:
@@ -15,7 +15,7 @@ jobs:
     if: github.event_name == 'push'
     defaults:
       run:
-        working-directory: backend/SignalingServer
+        working-directory: backend/NodeServer
   
     steps:
       - uses: actions/checkout@v2
