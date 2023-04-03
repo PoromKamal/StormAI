@@ -1,0 +1,91 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    expose:
+      - 80
+    restart: always
+
+  postgres:
+    container_name: postgres
+    image: postgres:15.2
+    restart: always
+    environment:
+      POSTGRES_USER: stormai
+      POSTGRES_PASSWORD: stormai
+    volumes:
+        - postgres:/var/lib/postgresql/data
+    ports:
+        - "5432:5432"
+
+  mongodb_container:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: stormai@stormai.com
+      PGADMIN_DEFAULT_PASSWORD: stormai
+    ports:
+        - "5050:80"
+  
+  authserver:
+    build:
+      context: ./backend/SpringServer
+      dockerfile: Dockerfile
+    container_name: authservice
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/stormai
+    ports:
+      - "5500:5500"
+    depends_on:
+        - postgres
+    restart: always
+  
+  nodeserver:
+    build:
+      context: ./backend/NodeServer
+      dockerfile: Dockerfile
+    container_name: nodeserver
+    ports:
+      - "5000:5000"
+    restart: always
+  
+  paymentserver:
+    build:
+      context: ./backend/PaymentServer
+      dockerfile: Dockerfile
+    container_name: paymentservice
+    ports:
+      - "3001:3001"
+    restart: always
+  
+  roomserver:
+    build:
+      context: ./backend/RoomServer
+      dockerfile: Dockerfile
+    container_name: roomservice
+    ports:
+      - "5555:5555"
+    restart: always
+    depends_on:
+      - mongodb_container
+
+  signalingserver:
+    build:
+      context: ./backend/SignalingServer
+      dockerfile: Dockerfile
+    container_name: signalingserver
+    ports:
+      - "4444:4444"
+    restart: always
+  
+

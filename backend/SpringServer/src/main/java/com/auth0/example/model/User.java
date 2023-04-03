@@ -24,5 +24,6 @@ public class User {
   )
   private Long id;
   private String email;
-  private String username; //Not unique, will init as their given name
+  private String username;//Not unique, will init as their given name
+  private int pro;
 }

@@ -4,15 +4,17 @@ package com.auth0.example.controller;
 import com.auth0.example.model.User;
 import com.auth0.example.model.UserRequest;
 import com.auth0.example.service.UserService;
+import com.auth0.example.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public record UserController(UserService userService){
   @GetMapping("/getMe")
   public User getMe(HttpServletResponse response){
@@ -22,6 +24,17 @@ public record UserController(UserService userService){
       return null;
     }
     return user;
+  }
+
+
+  @GetMapping("/upgradeUser")
+  public RedirectView upgradeUser(HttpServletResponse response) {
+    // Extract the email from the metadata
+    User user = userService.getMe();
+    user = userService.upgradeUser(user);
+    RedirectView redirectView = new RedirectView();
+    redirectView.setUrl("http://localhost:3000");
+    return redirectView;
   }
 
   @GetMapping("/test")

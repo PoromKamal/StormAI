@@ -36,7 +36,7 @@ public class LoginHandler implements AuthenticationSuccessHandler{
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
     String email = getEmail((OAuth2AuthenticationToken) authentication);
     String username = getName((OAuth2AuthenticationToken) authentication);
-    userService.registerUser(email, username);
+    userService.registerUser(email, username, 0);
     response.sendRedirect("http://localhost:3000/");
   }
 

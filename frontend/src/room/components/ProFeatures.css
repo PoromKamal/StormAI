@@ -1,0 +1,58 @@
+.pro-features-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f0f0f0;
+  }
+  
+  .pro-features-title {
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .pro-features-description {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .pro-features-list {
+    list-style: disc; /* Set the bullet style */
+    margin-left: 20px;
+    padding-left: 0;
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  
+  .pro-feature {
+    margin-bottom: 5px;
+  }
+  
+  .pro-features-upgrade {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .proButton {
+    display: block;
+    margin: 40px;
+    background-color: #2ecc71;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.3);
+  }
+  
+  .proButton:hover {
+    background-color: #27ae60;
+  }
+  
+  .proButton:active {
+    background-color: #219d55;
+  }
+  

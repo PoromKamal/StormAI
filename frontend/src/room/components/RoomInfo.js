@@ -9,6 +9,16 @@ const RoomInfo = () => {
   const [infoOpen, setInfoOpen] = useState(false);
 
   useEffect(() => {
+    const newUsers = [];
+    awareness.getStates().forEach(state => {
+      if (state.user) {
+        newUsers.push(state.user);
+      }
+    })
+    setUsers(newUsers);
+  }, []);
+
+  useEffect(() => {
     const handler = () => {
       const newUsers = [];
       awareness.getStates().forEach(state => {
@@ -36,7 +46,7 @@ const RoomInfo = () => {
       </div>
       {infoOpen &&
         <div className='flex flex-col fixed top-0 right-0 w-64 p-4 mr-14 mt-2 border rounded-md bg-gray-900 text-white opacity-90 z-50 shadow'>
-          <h1>Room Name: {yDoc.getMap('roomInfo').get('name')}</h1>
+          <h1>Room Name: {yDoc.getMap('roomInfo').get('info').name}</h1>
           <h1>Connected users:</h1>
           {users.map((user, index) => (
             <p key={index} style={{ color: user.color }}>{user.name}</p>

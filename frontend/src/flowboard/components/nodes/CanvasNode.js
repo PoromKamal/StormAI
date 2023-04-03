@@ -3,10 +3,24 @@ import { YjsContext } from '../../../room/components/Room';
 
 const CanvasNode = ({ id, data }) => {
   const [drawing, setDrawing] = useState(false);
+  const [showOutline, setShowOutline] = useState(true);
+  const [userInCanvas, setUserInCanvas] = useState(false);
   const { yDoc } = useContext(YjsContext);
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const pathRef = useRef(null);
+
+  // Hide outline 2s after the user leaves the node
+  useEffect(() => {
+    if (userInCanvas) {
+      setShowOutline(true);
+    } else {
+      const timeout = setTimeout(() => {
+        setShowOutline(false);
+      }, 2000);
+      return () => clearTimeout(timeout);
+    }
+  }, [userInCanvas]);
 
   useLayoutEffect(() => {
     const canvas = canvasRef.current
@@ -80,7 +94,10 @@ const CanvasNode = ({ id, data }) => {
   }
 
   return (
-    <div className='bg-transparent rounded focus:ring-1 focus:ring-black focus:border-t-8 focus:border-black focus:-mt-2'
+    <div className={`bg-transparent rounded ${showOutline ? 'ring-1 ring-black border-t-8 border-black -mt-2' : ''}`}
+      onClick={() => setShowOutline(true)}
+      onMouseEnter={() => setUserInCanvas(true)}
+      onMouseLeave={() => setUserInCanvas(false)}
       onMouseDown={startDrawing}
       onMouseUp={finishDrawing}
       onMouseMove={draw} tabIndex="0">
