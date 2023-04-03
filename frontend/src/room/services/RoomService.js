@@ -20,6 +20,16 @@ roomService.getDoc = function (roomId) {
   return fetch(`${baseUrl}/rooms/${roomId}/doc`).then(res => res.json());
 }
 
+roomService.updateNumUsers = function (roomId, numUsers) {
+  return fetch(`${baseUrl}/rooms/${roomId}/numUsers`, {
+      method: 'PATCH',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ numUsers })
+  }).then(res => res.json());
+}
+
 roomService.updateDoc = function (roomId, docState, lastUpdated) {
   // Transform docState and lastUpdated into a FormData object so we can use multer
   const data = new FormData();
