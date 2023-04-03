@@ -15,7 +15,7 @@ jobs:
     if: github.event_name == 'push'
     defaults:
       run:
-        working-directory: /backend/SpringServer
+        working-directory: backend/SpringServer
   
     steps:
       - uses: actions/checkout@v2
