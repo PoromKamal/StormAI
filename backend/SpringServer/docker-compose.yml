@@ -19,3 +19,13 @@ services:
       PGADMIN_DEFAULT_PASSWORD: stormai
     ports:
         - "5050:80"
+  authservice:
+    build: .
+    container_name: authservice
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/stormai
+    ports:
+      - "5500:5500"
+    depends_on:
+        - postgres
+    restart: always
