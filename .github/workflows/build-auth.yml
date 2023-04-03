@@ -1,12 +1,13 @@
-name: Build the frontend
+name: Build the backend auth service
 
 on:
   push:
     branches:
       - main
+      - dev
 
 env: 
-  IMAGE_NAME: stormai-frontend
+  IMAGE_NAME: stormai-auth-server
 
 jobs:
   push:
@@ -14,13 +15,15 @@ jobs:
     if: github.event_name == 'push'
     defaults:
       run:
-        working-directory: frontend
+        working-directory: backend/SpringServer
   
     steps:
       - uses: actions/checkout@v2
 
       - name: Build image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
+
+      - run: ls
 
       - name: Log into GitHub Container Registry
         # TODO: Create a Personal Access Tokens (PAT) with `read:packages` and `write:packages` scopes and save it as an Actions secret `CR_PAT`
