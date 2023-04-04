@@ -83,6 +83,7 @@ services:
     environment:
       - VIRTUAL_HOST=payment.stormai.live
       - LETSENCRYPT_HOST=payment.stormai.live
+      - STRIPE_API_KEY=INSERTHERE
     expose:
       - 3001
     restart: always
