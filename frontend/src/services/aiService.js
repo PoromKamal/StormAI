@@ -18,14 +18,14 @@ export default class apiService{
             }
         }
 
-        return fetch(`${process.env.REACT_APP_STORY_BOT_SERVER}`, {
+        return fetch(`${process.env.REACT_APP_NODE_SERVER}/ai/finishStory`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": `Bearer ${process.env.REACT_APP_HUGGINGFACE_TOKEN}`
             },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({prompt: prompt})
         }).then((response) =>{
+            console.log(response);
             return response.json();
         });
     }
