@@ -70,8 +70,10 @@ const MindMapNode = ({ id, data }) => {
 
   return (
     <div>
-      <div onClick={() => setShowHandles(true)} onMouseEnter={() => setShowColorPicker(true)} onMouseLeave={() => setShowColorPicker(false)} className={`${getColor(data.color)} h-16 p-3 border ${getBorderColor(data.color)} rounded-3xl flex flex-col`}>
-        <input
+      <div onClick={() => setShowHandles(true)} onMouseEnter={() => setShowColorPicker(true)} onMouseLeave={() => setShowColorPicker(false)} className={`${getColor(data.color)} h-36 p-3 border ${getBorderColor(data.color)} rounded-3xl flex flex-col`}>
+        <textarea
+          rows={100}
+          cols={20}
           className='text-black text-lg nodrag bg-transparent w-full focus:outline-none rounded-2xl focus:placeholder-transparent text-center h-full'
           value={data.label}
           placeholder='Enter text...'

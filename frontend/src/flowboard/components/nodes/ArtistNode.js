@@ -20,6 +20,8 @@ const ArtistNode = ({ id, data }) => {
 
   const onFinishStoryClick = () => {
     aiService.generateImage(storyText).then((blob) => {
+        if(blob.err !== undefined)
+          alert('Artist Bot is currently rate limited!');
         console.log(blob);
         setImageGenerated(true);
         setImage(URL.createObjectURL(blob));
