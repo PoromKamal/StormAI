@@ -3,7 +3,9 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import multer from 'multer';
 import Room from './models/Room.js';
+import dotenv from 'dotenv';
 
+dotenv.config();
 const PORT = 5555;
 const app = express();
 //app.use(express.json({limit: '50mb'}));
@@ -13,9 +15,15 @@ app.use(cors());
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
 
-mongoose.connect('mongodb://mongodb_container/mydatabase', { useNewUrlParser: true, useUnifiedTopology: true })
+const mongoDBConnect = () =>{
+  let containerName = process.env.NODE_ENV === 'production' ? 'mongodb_container' : 'localhost';
+  mongoose.connect(`mongodb://${containerName}/mydatabase`, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected...'))
   .catch(err => console.log(err));
+}
+
+mongoDBConnect();
+
 
 app.get('/rooms/:id/info', async (req, res) => {
   try {
