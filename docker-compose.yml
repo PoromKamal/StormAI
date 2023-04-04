@@ -73,6 +73,7 @@ services:
     environment:
       - VIRTUAL_HOST=node.stormai.live
       - LETSENCRYPT_HOST=node.stormai.live
+      - OPENAI_API_KEY=INSERTHERE
     expose:
       - 5000
     restart: always

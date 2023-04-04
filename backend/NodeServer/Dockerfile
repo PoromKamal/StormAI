@@ -10,5 +10,7 @@ RUN npm install
 # Bundle app source
 COPY . .
 
+ENV OPENAI_API_KEY=example
+
 EXPOSE 5000
 CMD [ "node", "index.js" ]
