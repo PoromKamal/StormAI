@@ -68,7 +68,7 @@ const Room = () => {
     if (!res.success) {
       setRoomExists(false);
       return;
-    } else if (res.room.numUsers >= 2) {
+    } else if (res.room.numUsers >= 5) {
       setRoomFull(true);
       return;
     }
