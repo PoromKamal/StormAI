@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 const roomService = {};
 
-const baseUrl = 'http://localhost:5555';
+const baseUrl = process.env.NODE_ENV === 'production' ? 'https://room.stormai.live' : 'http://localhost:5555';
 
 roomService.incrementNumUsers = function (roomId) {
     return fetch(`${baseUrl}/rooms/${roomId}/numUsers/increment`, {
