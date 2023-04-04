@@ -31,31 +31,12 @@ export default class apiService{
     }
 
     static askQuestion(question){
-        const payload = {
-            "inputs": `Q: ${question}\n A: `,
-            "parameters": {
-                "temperature": 1,
-                "min_length": 25,
-                "max_new_tokens": 50,
-                "return_full_text": false,
-                "do_sample": false,
-                "seed": 10,
-                "early_stopping": false,
-                "length_penalty": 0.0
-            },
-            "options": {
-                "use_cache": false,
-                "wait_for_model": false
-            }
-        }
-        
-        return fetch(`${process.env.REACT_APP_STORY_BOT_SERVER}`, {
+        return fetch(`${process.env.REACT_APP_NODE_SERVER}/ai/askQuestion`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": `Bearer ${process.env.REACT_APP_HUGGINGFACE_TOKEN}`
             },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({prompt: question})
         }).then((response) =>{
             return response.json();
         });

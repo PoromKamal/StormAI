@@ -2,12 +2,14 @@ import { useCallback, useContext, useState } from 'react'
 import { YjsContext } from '../../../room/components/Room';
 import { MdQuestionAnswer } from 'react-icons/md';
 import aiService from '../../../services/aiService';
+import ClipLoader from "react-spinners/ClipLoader";
 
 const ChatNode = ({ id, data }) => {
   const { yDoc } = useContext(YjsContext);
   const [questionText, setQuestionText] = useState('');
   const [answer, setAnswer] = useState('');
   const [asked, setAsked] = useState(false);
+  const [loading, setLoading] = useState(false);
   const onChange = useCallback((e) => {
     const currentNode = yDoc.getMap('nodes').get(id);
     yDoc.getMap('nodes').set(id, {
@@ -18,12 +20,14 @@ const ChatNode = ({ id, data }) => {
   }, [])
 
   const onAskClick = () => {
+    setLoading(true);
     aiService.askQuestion(questionText).then((res) => {
-        if(!res[0].generated_text)
-            alert('Chat bot is currently rate limited!');
+        if(!res.completion)
+            alert('Error asking question! Try again later.');
         console.log(res);
         setAsked(true);
-        setAnswer(res[0].generated_text);
+        setLoading(false);
+        setAnswer(res.completion);
     });
   }
 
@@ -43,6 +47,13 @@ const ChatNode = ({ id, data }) => {
                 onClick={onAskClick}>
                 Ask!
             </button>
+            <ClipLoader
+                    color='0000FF'
+                    loading={loading}
+                    size={25}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                    />
             {
                 asked &&
                 <textarea                
