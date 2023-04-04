@@ -65,6 +65,54 @@ app.post('/rooms', async (req, res) => {
   }
 });
 
+app.patch('/rooms/:id/numUsers', async (req, res) => {
+  try {
+    const room = await Room.findById(req.params.id);
+    if (room) {
+      room.numUsers = req.body.numUsers;
+      await room.save();
+      return res.status(200).json({ room: room, success: true });
+    } else {
+      return res.status(404).json({ success: false });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ err, success: false });
+  }
+});
+
+app.patch('/rooms/:id/numUsers/increment', async (req, res) => {
+  try {
+    const room = await Room.findById(req.params.id);
+    if (room) {
+      room.numUsers += 1;
+      await room.save();
+      return res.status(200).json({ room: room, success: true });
+    } else {
+      return res.status(404).json({ success: false });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ err, success: false });
+  }
+});
+
+app.patch('/rooms/:id/numUsers/decrement', async (req, res) => {
+  try {
+    const room = await Room.findById(req.params.id);
+    if (room) {
+      room.numUsers -= 1;
+      await room.save();
+      return res.status(200).json({ room: room, success: true });
+    } else {
+      return res.status(404).json({ success: false });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ err, success: false });
+  }
+});
+
 app.patch('/rooms/:id/doc', upload.single('doc'), async (req, res) => {
   // Uses multer to receive the docState as a buffer
   const docState = req.file.buffer;

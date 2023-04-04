@@ -10,5 +10,9 @@ RUN npm install
 # Bundle app source
 COPY . .
 
+ENV OPENAI_API_KEY=example
+ENV HUGGINFACE_API_KEY=example
+ENV STORYBOT_SERVER_URL=https://api-inference.huggingface.co/models/bigscience/bloom
+
 EXPOSE 5000
 CMD [ "node", "index.js" ]

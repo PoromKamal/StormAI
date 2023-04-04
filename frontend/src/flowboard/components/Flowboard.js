@@ -6,6 +6,7 @@ import CursorNode from './nodes/CursorNode';
 import StoryNode from './nodes/StoryNode';
 import ArtistNode from './nodes/ArtistNode';
 import MindMapNode from './nodes/MindMapNode';
+import ChatNode from './nodes/ChatNode';
 import MindMapEdge from './edges/MindMapEdge';
 import Sidebar from './Sidebar';
 import useNodesStateSynced from '../hooks/useNodesStateSynced';
@@ -24,6 +25,7 @@ const nodeTypes = {
   story: StoryNode,
   artist: ArtistNode,
   mindmap: MindMapNode,
+  chat: ChatNode,
 };
 
 const edgeTypes = {

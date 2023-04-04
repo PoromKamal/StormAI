@@ -31,6 +31,7 @@ const Room = () => {
   const [username, setUsername] = useState('');
   const [roomCreatedOrJoined, setRoomCreatedOrJoined] = useState(false);
   const [roomExists, setRoomExists] = useState(true);
+  const [roomFull, setRoomFull] = useState(false);
   const [yjsProvider, setYjsProvider] = useState(null);
   const [yDoc, setYDoc] = useState(null);
   const [user, setUser] = useState({ authenticated: false });
@@ -50,42 +51,41 @@ const Room = () => {
   const createRoom = async () => {
     const res = await roomService.createRoom({ name: roomName });
     if (!res.success) {
-      console.log("unable to create room");
+      console.log("Unable to create room");
       return;
     }
-    console.log(res);
-    const doc = new Doc();
-    //If in production set signaling to ['wss://signaling.yjs.dev']
-    let signalingServer =  process.env.NODE_ENV === 'production' ? ['wss://signaling.stormai.live'] : ['ws://localhost:4444'];
-    const provider = new WebrtcProvider(res.room._id, doc, { signaling: signalingServer });
-    provider.awareness.setLocalStateField('user', { name: username, color: userColours[Math.floor(Math.random() * userColours.length)] });
-    doc.getMap('settings').set('variant', 'dots');
-    doc.getMap('roomInfo').set('info', res.room);
-    setYDoc(doc);
-    setYjsProvider(provider);
-    setRoomCreatedOrJoined(true);
+    joinRoom(res.room._id);
   };
 
-  const joinRoom = async () => {
-    // Use either roomId from url or roomName from input
-    const roomIdOrName = roomId || roomName;
+  const joinRoom = async (room) => {
+    // Use either roomId from url, roomName from input, or room from createRoom
+    let roomIdOrName = roomId || roomName;
+    if (room) {
+      roomIdOrName = room;
+    }
     const res = await roomService.getRoomInfo(roomIdOrName);
-    // Continue if room exists
+    // Check if room exists or is full
     if (!res.success) {
       setRoomExists(false);
       return;
+    } else if (res.room.numUsers >= 5) {
+      setRoomFull(true);
+      return;
     }
+    // Joins room by creating a new yjs doc and provider
     const doc = new Doc();
     let signalingServer =  process.env.NODE_ENV === 'production' ? ['wss://signaling.stormai.live'] : ['ws://localhost:4444'];
     const provider = new WebrtcProvider(res.room._id, doc, { signaling: signalingServer });
     const update = await roomService.getDoc(res.room._id);
-    const alreadyLoaded = doc.getMap('loading').get('alreadyLoaded');
-    if (!alreadyLoaded && update.doc) {
-      // If no one is in the room, apply the last state from the server
-      doc.getMap('loading').set('alreadyLoaded', true);
+    // Get number of users currently in room
+    const usersInRoom = Array.from(provider.awareness.getStates().values()).length;
+    if (usersInRoom <= 1 && update.doc) {
+      // If first to join the room, apply the last state from the server
       console.log('Applying update from server...')
       applyUpdate(doc, new Uint8Array(update.doc.data));
+      roomService.updateNumUsers(res.room._id, 1);
     }
+    // Assign username and colour to user, and set doc and provider for context
     provider.awareness.setLocalStateField('user', { name: username, color: userColours[Math.floor(Math.random() * userColours.length)] });
     doc.getMap('roomInfo').set('info', res.room);
     setYDoc(doc);
@@ -93,14 +93,14 @@ const Room = () => {
     setRoomCreatedOrJoined(true);
   };
 
-  const horizontalLine = (<div className='mx-32 my-3 rounded-lg h-1 bg-black'/>)
+  const horizontalLine = (<div className='mx-32 my-3 rounded-lg h-1 bg-black' />)
   const animateText = "hover:animate-text hover:bg-gradient-to-r from-blue-900 via-indigo-500 to-cyan-400 hover:text-white"
 
-  if(!roomCreatedOrJoined){
-    return(
+  if (!roomCreatedOrJoined) {
+    return (
       <div className='h-full flex flex-col justify-center'>
         <StormLogo />
-        <NavBar/>
+        <NavBar />
         <div className='h-20 ml-32 text-6xl font-semibold text-storm-blue animate-introText animate-text bg-gradient-to-r from-blue-900 via-indigo-500 to-cyan-400 bg-clip-text text-transparent'>
           Get started with AI Powered Productivity.
         </div>
@@ -109,39 +109,39 @@ const Room = () => {
 
         <div className='flex flex-col justify-evenly text-2xl font-semibold text-storm-blue mx-auto'>
           <div className='w-full flex gap-6 mt-10'>
-            
+
             {
-              roomId ? 
+              roomId ?
                 <>
                   <div>
-                    You've been invited to: 
+                    You've been invited to:
                     <p className='text-2xl'>{roomId}</p>
                   </div>
-                </> : 
+                </> :
                 <input className="w-fit text-3xl border border-solid border-2 rounded-md font-semibold p-1" type="text" placeholder='Enter room name' value={roomName} onChange={(e) => setRoomName(e.target.value)} />
             }
-            
+
             {
               user.authenticated ?
-                "":
+                "" :
                 <>
                   <div>
                     as
                   </div>
-                  <input className="w-fit text-3xl border border-solid border-2 rounded-md font-semibold p-1" 
-                    type="text" 
-                    placeholder='Enter username' 
-                    value={username} 
+                  <input className="w-fit text-3xl border border-solid border-2 rounded-md font-semibold p-1"
+                    type="text"
+                    placeholder='Enter username'
+                    value={username}
                     onChange={(e) => setUsername(e.target.value)} />
                 </>
             }
-            
+
           </div>
-          
+
           {
             roomId ?
               <>
-              </> :            
+              </> :
               <>
                 <button className={`mx-auto w-fit mt-10 border-solid border-2 rounded-xl font-semibold p-3  ${animateText}`}
                   onClick={createRoom}>
@@ -153,20 +153,21 @@ const Room = () => {
               </>
           }
 
-          <button className={`mx-auto w-fit border-solid border-2 rounded-xl font-semibold p-3  ${animateText}`} 
-            onClick={joinRoom}>
+          <button className={`mx-auto w-fit border-solid border-2 rounded-xl font-semibold p-3  ${animateText}`}
+            onClick={() => joinRoom()}>
             Join Room
           </button>
           {!roomExists && <p className='mx-auto font-semibold text-red-500'>Room does not exist</p>}
+          {roomFull && <p className='mx-auto font-semibold text-red-500'>Room is full</p>}
         </div>
       </div>
-      )
+    )
   }
-  
+
   return (
     <>
       <YjsContext.Provider value={{ yDoc, yjsProvider }}>
-        <StormLogo/>
+        <StormLogo />
         <RoomInfo />
         <AuthButton />
         <ReactFlowProvider>

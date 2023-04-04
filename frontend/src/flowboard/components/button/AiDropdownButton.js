@@ -5,6 +5,7 @@ import { MdHistoryEdu } from 'react-icons/md';
 import { YjsContext } from '../../../room/components/Room';
 import apiService from "../../../services/apiService";
 import ToolTip from '@mui/material/Tooltip'
+import { MdQuestionAnswer } from 'react-icons/md';
 
 const AiDropdownButton = () => {
   const { yDoc, yjsProvider } = useContext(YjsContext);
@@ -39,7 +40,7 @@ const AiDropdownButton = () => {
         <FaRobot />
       </div>
       {dropdownOpen &&
-        <div className="flex flex-col text-center left-10 top-64 fixed w-72 h-64 p-4 mr-14 mt-2 border rounded-md bg-gray-900 text-white opacity-90 z-50 shadow">
+        <div className="flex flex-col text-center left-10 top-1/2 -translate-y-1/2 fixed w-72 h-72 p-4 mr-14 mt-2 border rounded-md bg-gray-900 text-white opacity-90 z-50 shadow">
           <div className="mb-5">
             <ToolTip title="Drag these onto the board!">
               <div className="m-2 w-5 h-5 bg-gray-700 text-white border-none rounded-full shadow-md flex justify-center items-center text-xl hover:bg-gray-700 hover:scale-110 transition-transform hover: cursor-pointer">
@@ -63,8 +64,16 @@ const AiDropdownButton = () => {
               </div>
               <div>Artist bot</div>
             </div>
+            <div className="flex items-center">
+              <div className="m-2 w-10 h-10 bg-gray-700 text-white border-none rounded shadow-md flex justify-center items-center text-xl hover:bg-gray-700 hover:scale-110 transition-transform hover: cursor-pointer"
+                onDragStart={(event) => onDragStart(event, "chat")}
+                draggable>
+                <MdQuestionAnswer />
+              </div>
+              <div>Chat bot</div>
+            </div>
           </div>
-          Subscrible for more bots!
+          Subscribe for more bots!
         </div>
       }
     </>

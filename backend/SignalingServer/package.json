@@ -15,6 +15,7 @@
     "prettier": "^2.8.4"
   },
   "dependencies": {
+    "node-fetch": "^3.3.1",
     "y-webrtc": "^10.2.5"
   }
 }

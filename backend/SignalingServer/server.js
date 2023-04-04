@@ -1,6 +1,7 @@
 import ws from 'ws'
 import http from 'http'
 import * as map from 'lib0/map'
+import roomService from './RoomService.js'
 
 const wsReadyStateConnecting = 0
 const wsReadyStateOpen = 1
@@ -92,6 +93,7 @@ const onconnection = conn => {
           /** @type {Array<string>} */ (message.topics || []).forEach(topicName => {
           if (typeof topicName === 'string') {
             console.log('subscribed to', topicName)
+            roomService.incrementNumUsers(topicName);
             // add conn to topic
             const topic = map.setIfUndefined(topics, topicName, () => new Set())
             topic.add(conn)
@@ -105,6 +107,7 @@ const onconnection = conn => {
           const subs = topics.get(topicName)
           if (subs) {
             console.log('unsubscribed from', topicName)
+            roomService.decrementNumUsers(topicName);
             subs.delete(conn)
           }
         })

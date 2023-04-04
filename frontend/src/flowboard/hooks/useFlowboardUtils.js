@@ -66,6 +66,8 @@ const useFlowboardUtils = () => {
         return createNewStoryNode(x, y);
       case 'artist':
         return createNewArtistNode(x, y);
+      case 'chat':
+        return createNewChatNode(x, y);
       default:
         return null;
     }
@@ -123,6 +125,15 @@ const useFlowboardUtils = () => {
       type: 'artist',
       position: project({ x: x - 144, y: y - 56 }),
       data: { text: 'What to draw...' },
+    };
+  }
+
+  const createNewChatNode = (x, y) => {
+    return {
+      id: createNodeId(),
+      type: 'chat',
+      position: project({ x: x - 144, y: y - 144 }),
+      data: { text: 'Start a chat...' },
     };
   }
 

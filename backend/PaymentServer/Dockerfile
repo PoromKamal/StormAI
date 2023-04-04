@@ -10,5 +10,7 @@ RUN npm install
 # Bundle app source
 COPY . .
 
+ENV STRIPE_API_KEY=example
+
 EXPOSE 3001
 CMD [ "node", "index.js" ]
