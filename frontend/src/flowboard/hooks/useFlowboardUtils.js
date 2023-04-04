@@ -115,7 +115,7 @@ const useFlowboardUtils = () => {
       id: createNodeId(),
       type: 'story',
       position: project({ x: x - 144, y: y - 144 }),
-      data: { text: 'Start a story...' },
+      data: { text: 'Start a story...', loading: false },
     };
   }
 
@@ -133,7 +133,7 @@ const useFlowboardUtils = () => {
       id: createNodeId(),
       type: 'chat',
       position: project({ x: x - 144, y: y - 144 }),
-      data: { text: 'Start a chat...' },
+      data: { text: '', answer:'', asked: false, loading: false },
     };
   }
 

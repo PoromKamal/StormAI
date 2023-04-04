@@ -6,22 +6,26 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 const StoryNode = ({ id, data }) => {
   const { yDoc } = useContext(YjsContext);
-  const [storyText, setStoryText] = useState('');
-  const [loading, setLoading] = useState(false);
   const onChange = useCallback((e) => {
     const currentNode = yDoc.getMap('nodes').get(id);
     yDoc.getMap('nodes').set(id, {
       ...currentNode,
-      data: { label: e.target.value },
+      data: { ...currentNode.data, text: e.target.value },
     });
-    setStoryText(e.target.value);
   }, [])
 
   const onFinishStoryClick = () => {
-    setLoading(true);
-    aiService.finishStory(storyText).then((res) => {
+    const currentNode = yDoc.getMap('nodes').get(id);
+    yDoc.getMap('nodes').set(id, {
+      ...currentNode,
+      data: { ...currentNode.data, loading: true },
+    });
+    aiService.finishStory(data.text).then((res) => {
         setLoading(false);
-        setStoryText(res[0].generated_text);
+        yDoc.getMap('nodes').set(id, {
+          ...currentNode,
+          data: { ...currentNode.data, text: res[0].generated_text, loading: false },
+        });
     });
   }
 
@@ -38,11 +42,11 @@ const StoryNode = ({ id, data }) => {
                 cols={100}
                 onChange={onChange}
                 className="textarea w-full bg-transparent text-black nodrag focus:bg-gray-100 focus:outline-none rounded"
-                value={storyText}
+                value={data.text}
             />
             <ClipLoader
                 color='white'
-                loading={loading}
+                loading={data.loading}
                 size={30}
                 aria-label="Loading Spinner"
                 data-testid="loader"  
