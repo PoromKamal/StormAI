@@ -73,7 +73,7 @@ const AiDropdownButton = () => {
               <div>Chat bot</div>
             </div>
           </div>
-          Subscrible for more bots!
+          Subscribe for more bots!
         </div>
       }
     </>

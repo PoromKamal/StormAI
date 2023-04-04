@@ -74,7 +74,7 @@ const MindMapNode = ({ id, data }) => {
         <textarea
           rows={100}
           cols={20}
-          className='text-black text-lg nodrag bg-transparent w-full focus:outline-none rounded-2xl focus:placeholder-transparent text-center h-full'
+          className='text-black text-lg nodrag resize-none bg-transparent w-full focus:outline-none rounded-2xl focus:placeholder-transparent text-center h-full'
           value={data.label}
           placeholder='Enter text...'
           onChange={onChange}
