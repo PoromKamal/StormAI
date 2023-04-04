@@ -1,14 +1,14 @@
-name: Build the frontend
+name: Build Node Server
 
 on:
   push:
     branches:
       - main
     paths:
-      - frontend/**
+      - backend/PaymentServer/**
 
 env: 
-  IMAGE_NAME: stormai-frontend
+  IMAGE_NAME: stormai-node-server
 
 jobs:
   push:
@@ -16,7 +16,7 @@ jobs:
     if: github.event_name == 'push'
     defaults:
       run:
-        working-directory: frontend
+        working-directory: backend/NodeServer
   
     steps:
       - uses: actions/checkout@v2

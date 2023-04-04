@@ -1,7 +1,7 @@
 const roomService = {};
 
-const baseUrl = 'http://localhost:5555';
-
+//If process in production
+const baseUrl = process.env.NODE_ENV === 'production' ? 'https://room.stormai.live' : 'http://localhost:5555';
 roomService.createRoom = function (room) {
   return fetch(`${baseUrl}/rooms`, {
     method: 'POST',

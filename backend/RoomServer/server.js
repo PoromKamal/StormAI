@@ -13,7 +13,7 @@ app.use(cors());
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
 
-mongoose.connect('mongodb://localhost/mydatabase', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://mongodb_container/mydatabase', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected...'))
   .catch(err => console.log(err));
 

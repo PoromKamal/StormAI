@@ -74,7 +74,8 @@ const Room = () => {
     }
     // Joins room by creating a new yjs doc and provider
     const doc = new Doc();
-    const provider = new WebrtcProvider(res.room._id, doc, { signaling: ['ws://localhost:4444'] });
+    let signalingServer =  process.env.NODE_ENV === 'production' ? ['wss://signaling.stormai.live'] : ['ws://localhost:4444'];
+    const provider = new WebrtcProvider(res.room._id, doc, { signaling: signalingServer });
     const update = await roomService.getDoc(res.room._id);
     // Get number of users currently in room
     const usersInRoom = Array.from(provider.awareness.getStates().values()).length;

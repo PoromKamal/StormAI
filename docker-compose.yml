@@ -1,3 +1,4 @@
+version: "3"
 services:
   nginx-proxy:
     image: jwilder/nginx-proxy
@@ -33,6 +34,20 @@ services:
       - VIRTUAL_HOST=stormai.live
       - LETSENCRYPT_HOST=stormai.live
 
+  authserver:
+    image: ghcr.io/uoft-utsc-cs-sandbox/stormai-auth-server
+    container_name: authservice
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/stormai
+      - VIRTUAL_HOST=auth.stormai.live
+      - LETSENCRYPT_HOST=auth.stormai.live
+      - SPRING_REDIRECT_URL = https://stormai.live
+    expose:
+      - 5500
+    depends_on:
+        - postgres
+    restart: always
+    
   postgres:
     container_name: postgres
     image: postgres:15.2
@@ -41,76 +56,56 @@ services:
       POSTGRES_USER: stormai
       POSTGRES_PASSWORD: stormai
     volumes:
-        - postgres:/var/lib/postgresql/data
+        - /postgres:/var/lib/postgresql/data
     ports:
         - "5432:5432"
-
+      
   mongodb_container:
     image: mongo:latest
     ports:
       - 27017:27017
     volumes:
-      - mongodb_data_container:/data/db
+      - mongodb_container:/data/db
 
-  pgadmin:
-    container_name: pgadmin
-    image: dpage/pgadmin4
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: stormai@stormai.com
-      PGADMIN_DEFAULT_PASSWORD: stormai
-    ports:
-        - "5050:80"
-  
-  authserver:
-    build:
-      context: ./backend/SpringServer
-      dockerfile: Dockerfile
-    container_name: authservice
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/stormai
-    ports:
-      - "5500:5500"
-    depends_on:
-        - postgres
-    restart: always
-  
   nodeserver:
-    build:
-      context: ./backend/NodeServer
-      dockerfile: Dockerfile
+    image: ghcr.io/uoft-utsc-cs-sandbox/stormai-node-server
     container_name: nodeserver
-    ports:
-      - "5000:5000"
+    environment:
+      - VIRTUAL_HOST=node.stormai.live
+      - LETSENCRYPT_HOST=node.stormai.live
+    expose:
+      - 5000
     restart: always
   
   paymentserver:
-    build:
-      context: ./backend/PaymentServer
-      dockerfile: Dockerfile
+    image: ghcr.io/uoft-utsc-cs-sandbox/stormai-payment-server
     container_name: paymentservice
-    ports:
-      - "3001:3001"
+    environment:
+      - VIRTUAL_HOST=payment.stormai.live
+      - LETSENCRYPT_HOST=payment.stormai.live
+    expose:
+      - 3001
     restart: always
   
   roomserver:
-    build:
-      context: ./backend/RoomServer
-      dockerfile: Dockerfile
+    image: ghcr.io/uoft-utsc-cs-sandbox/stormai-room-server
     container_name: roomservice
-    ports:
-      - "5555:5555"
+    environment:
+      - VIRTUAL_HOST=room.stormai.live
+      - LETSENCRYPT_HOST=room.stormai.live
+    expose:
+      - 5555
     restart: always
     depends_on:
       - mongodb_container
 
   signalingserver:
-    build:
-      context: ./backend/SignalingServer
-      dockerfile: Dockerfile
+    image: ghcr.io/uoft-utsc-cs-sandbox/stormai-signaling-server
     container_name: signalingserver
-    ports:
-      - "4444:4444"
+    expose:
+      - 4444
+    environment:
+      - VIRTUAL_HOST=signaling.stormai.live
+      - LETSENCRYPT_HOST=signaling.stormai.live
     restart: always
   
-

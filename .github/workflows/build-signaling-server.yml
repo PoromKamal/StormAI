@@ -1,14 +1,14 @@
-name: Build the frontend
+name: Build signaling server
 
 on:
   push:
     branches:
       - main
     paths:
-      - frontend/**
+      - backend/SignalingServer/**
 
 env: 
-  IMAGE_NAME: stormai-frontend
+  IMAGE_NAME: stormai-signaling-server
 
 jobs:
   push:
@@ -16,7 +16,7 @@ jobs:
     if: github.event_name == 'push'
     defaults:
       run:
-        working-directory: frontend
+        working-directory: backend/SignalingServer
   
     steps:
       - uses: actions/checkout@v2

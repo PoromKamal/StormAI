@@ -9,6 +9,7 @@ import com.auth0.example.repository.UserRepository;
 import com.auth0.example.service.UserService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.springframework.core.env.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,6 +30,9 @@ public class LoginHandler implements AuthenticationSuccessHandler{
   @Autowired
   private UserService userService;
 
+  @Autowired
+  private Environment env;
+
   public LoginHandler() {
   }
 
@@ -37,7 +41,8 @@ public class LoginHandler implements AuthenticationSuccessHandler{
     String email = getEmail((OAuth2AuthenticationToken) authentication);
     String username = getName((OAuth2AuthenticationToken) authentication);
     userService.registerUser(email, username, 0);
-    response.sendRedirect("http://localhost:3000/");
+    String redirect_url = env.getProperty("spring.redirect.url");
+    response.sendRedirect(redirect_url);
   }
 
   public String getName(OAuth2AuthenticationToken authentication) {
