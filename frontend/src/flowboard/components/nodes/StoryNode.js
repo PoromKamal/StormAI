@@ -2,10 +2,12 @@ import { useCallback, useContext, useState } from 'react'
 import { YjsContext } from '../../../room/components/Room';
 import { MdHistoryEdu } from 'react-icons/md';
 import aiService from '../../../services/aiService';
+import ClipLoader from "react-spinners/ClipLoader";
 
 const StoryNode = ({ id, data }) => {
   const { yDoc } = useContext(YjsContext);
   const [storyText, setStoryText] = useState('');
+  const [loading, setLoading] = useState(false);
   const onChange = useCallback((e) => {
     const currentNode = yDoc.getMap('nodes').get(id);
     yDoc.getMap('nodes').set(id, {
@@ -16,7 +18,9 @@ const StoryNode = ({ id, data }) => {
   }, [])
 
   const onFinishStoryClick = () => {
+    setLoading(true);
     aiService.finishStory(storyText).then((res) => {
+        setLoading(false);
         setStoryText(res[0].generated_text);
     });
   }
@@ -25,7 +29,7 @@ const StoryNode = ({ id, data }) => {
     <div className='bg-gray-200 h-72 w-72 p-3 border rounded flex' style={{
       transition: "transform 1s linear",
     }}>
-        <div className='flex flex-col'>
+        <div className='flex flex-col items-center'>
             <MdHistoryEdu/>
             <textarea
                 spellCheck={false}
@@ -36,10 +40,18 @@ const StoryNode = ({ id, data }) => {
                 className="textarea w-full bg-transparent text-black nodrag focus:bg-gray-100 focus:outline-none rounded"
                 value={storyText}
             />
-            <button className='bg-gray-300 rounded-md hover:bg-gray-400'
+            <ClipLoader
+                color='white'
+                loading={loading}
+                size={30}
+                aria-label="Loading Spinner"
+                data-testid="loader"  
+                />
+            <button className='mt-10 bg-gray-300 rounded-md hover:bg-gray-400 w-20'
                 onClick={onFinishStoryClick}>
                 Finish!
             </button>
+
         </div>
 
     </div>
