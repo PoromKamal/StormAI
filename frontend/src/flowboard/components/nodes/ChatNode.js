@@ -6,33 +6,28 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 const ChatNode = ({ id, data }) => {
   const { yDoc } = useContext(YjsContext);
-  const [questionText, setQuestionText] = useState('');
-  const [answer, setAnswer] = useState('');
-  const [asked, setAsked] = useState(false);
-  const [loading, setLoading] = useState(false);
   const onChange = useCallback((e) => {
     const currentNode = yDoc.getMap('nodes').get(id);
     yDoc.getMap('nodes').set(id, {
       ...currentNode,
       data: { ...currentNode.data, text: e.target.value },
     });
-    //setQuestionText(e.target.value);
   }, [])
 
   const onAskClick = () => {
-    setLoading(true);
+    const currentNode = yDoc.getMap('nodes').get(id);
+    yDoc.getMap('nodes').set(id, {
+      ...currentNode,
+      data: { ...currentNode.data, loading: true },
+    });
     aiService.askQuestion(data.text).then((res) => {
-        if(!res.completion)
-            alert('Error asking question! Try again later.');
-        console.log(res);
-        setAsked(true);
-        setLoading(false);
-        const currentNode = yDoc.getMap('nodes').get(id);
-        yDoc.getMap('nodes').set(id, {
-          ...currentNode,
-          data: { ...currentNode.data, answer: res.completion },
-        });
-        //setAnswer(res.completion);
+      if (!res.completion)
+        alert('Error asking question! Try again later.');
+      console.log(res);
+      yDoc.getMap('nodes').set(id, {
+        ...currentNode,
+        data: { ...currentNode.data, answer: res.completion, asked: true, loading: false },
+      });
     });
   }
 
@@ -55,13 +50,13 @@ const ChatNode = ({ id, data }) => {
         </button>
         <ClipLoader
           color='0000FF'
-          loading={loading}
+          loading={data.loading}
           size={25}
           aria-label="Loading Spinner"
           data-testid="loader"
         />
         {
-          asked &&
+          data.asked &&
           <textarea
             spellCheck={false}
             rows={10}
