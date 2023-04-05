@@ -61,11 +61,10 @@ This platform will revolutionize the way teams collaborate, and brainstorm, as i
 - AI text generation integrated into application
 - Ability to save whiteboard save/load to personal account
 - AI paid tier form completed with secure Stripe transactions
-- Allow hosts to restrict access to whiteboard
 
 > Final version
 
 - Polished and visually appealing UI
 - Different kinds of whiteboard brushes, and highlighters
 - AI Image generation integrated into application if user is on paid tier
-- Allow teams to video call while on the whiteboard interface
+- GPT powered premium AI bot (Question bot) integrated into the application
