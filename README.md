@@ -38,6 +38,7 @@ This platform will revolutionize the way teams collaborate, and brainstorm, as i
 - OpenAI API (1 complexity point)
 - bigscience/bloom API (1 complexity point)
 - React Flow  (2 complexity points)
+- stable-diffusion-v5 (Hugging face api) (1 complexity point)
 - Yjs (3 complexity points)
 
 ## (Optional) What complexity points will be attempted as bonus for the challenge factor
