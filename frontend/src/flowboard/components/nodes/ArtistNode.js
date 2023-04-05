@@ -8,34 +8,37 @@ import ClipLoader from "react-spinners/ClipLoader";
 const ArtistNode = ({ id, data }) => {
   const { yDoc } = useContext(YjsContext);
   const [storyText, setStoryText] = useState('');
-  const [imageGenerated, setImageGenerated] = useState(false);
-  const [image, setImage] = useState('');
-  const [loading, setLoading] = useState(false);
   const onChange = useCallback((e) => {
     const currentNode = yDoc.getMap('nodes').get(id);
     yDoc.getMap('nodes').set(id, {
       ...currentNode,
-      data: { label: e.target.value },
+      data: { text: e.target.value },
     });
     setStoryText(e.target.value);
-  }, [])
+  }, []);
 
-  const onFinishStoryClick = () => {
+  const onGenerateImageClick = () => {
+    const currentNode = yDoc.getMap('nodes').get(id);
+    yDoc.getMap('nodes').set(id, {
+      ...currentNode,
+      data: {loading: true},
+    });
     setLoading(true);
     aiService.generateImage(storyText).then((blob) => {
         if(blob.err !== undefined)
           alert('Artist Bot is currently rate limited!');
-        console.log(blob);
-        setImageGenerated(true);
-        setLoading(false);
-        setImage(URL.createObjectURL(blob));
+        const url = URL.createObjectURL(blob);
+        yDoc.getMap('nodes').set(id, {
+          ...currentNode,
+          data: { imageGenerated: true, imageSrc: url, loading: false},
+        });
     });
   }
 
   return (
-        imageGenerated ? (
+        data.imageGenerated ? (
             <>
-                <img src={image} alt="drawing" width="500" height="600"/>
+                <img src={data.imageSrc ? data.imageSrc : ""} alt="drawing" width="500" height="600"/>
             </>
         ) : 
         <>
@@ -51,15 +54,15 @@ const ArtistNode = ({ id, data }) => {
                           cols={100}
                           onChange={onChange}
                           className="textarea w-full bg-transparent text-black nodrag focus:bg-gray-100 focus:outline-none rounded"
-                          value={storyText}
+                          value={data.text}
                       />
                       <button className='bg-gray-300 w-64 rounded-md hover:bg-gray-400'
-                          onClick={onFinishStoryClick}>
+                          onClick={onGenerateImageClick}>
                           Finish!
                       </button>
                       <ClipLoader
                           color='0000FF'
-                          loading={loading}
+                          loading={data.loading ? data.loading : false}
                           size={25}
                           aria-label="Loading Spinner"
                           data-testid="loader"  
