@@ -55,6 +55,7 @@ const ArtistNode = ({ id, data }) => {
                           onChange={onChange}
                           className="textarea w-full bg-transparent text-black nodrag focus:bg-gray-100 focus:outline-none rounded"
                           value={data.text}
+                          required
                       />
                       <button className='bg-gray-300 w-64 rounded-md hover:bg-gray-400'
                           onClick={onGenerateImageClick}>
