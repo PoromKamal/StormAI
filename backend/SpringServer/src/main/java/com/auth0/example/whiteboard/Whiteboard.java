@@ -1,18 +1,19 @@
-package com.auth0.example.model;
+package com.auth0.example.whiteboard;
 
-import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+
 @Entity
-@Table(name = "Users")
+@Table(name = "Whiteboards")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Whiteboard {
   @Id
   @SequenceGenerator(
       name="user_sequence",
@@ -23,7 +24,7 @@ public class User {
       generator = "user_sequence"
   )
   private Long id;
-  private String email;
-  private String username;//Not unique, will init as their given name
-  private int pro;
+  private String whiteboardId; //ID of the whiteboard
+  private String userId; //User ID of the user who saved the whiteboard
+  private String roomName;
 }

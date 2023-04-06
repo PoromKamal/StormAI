@@ -53,11 +53,16 @@ const NavBar = () => {
                     <div className={`transition-all hover:font-extrabold hover:scale-x-110 cursor-pointer ${animateText}`}>
                         {user.username.toUpperCase()} \
                     </div>
-
-                    <a className={` transition-all duration-1000 ${hover ? "animate-logo": "hidden" }  hover:font-extrabold hover:scale-x-110 cursor-pointer text-xl ${animateText}`}
-                            href={`${process.env.REACT_APP_AUTH_SERVER}/logout`}>
-                            LOGOUT \
-                    </a>
+                    <div className="flex flex-col gap-3">
+                        <a className={` transition-all duration-1000 ${hover ? "animate-logo": "hidden" }  hover:font-extrabold hover:scale-x-110 cursor-pointer text-xl ${animateText}`}
+                                onClick={()=>navigate("/savedBoards")}>
+                                SAVED \
+                        </a>
+                        <a className={` transition-all duration-1000 ${hover ? "animate-logo": "hidden" }  hover:font-extrabold hover:scale-x-110 cursor-pointer text-xl ${animateText}`}
+                                href={`${process.env.REACT_APP_AUTH_SERVER}/logout`}>
+                                LOGOUT \
+                        </a>
+                    </div>
                 </div> :
                 <a className={`transition-all hover:font-extrabold hover:scale-x-110 cursor-pointer ${animateText}`}
                     href={`${process.env.REACT_APP_AUTH_SERVER}/oauth2/authorization/auth0`}>
