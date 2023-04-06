@@ -23,7 +23,6 @@ const ArtistNode = ({ id, data }) => {
       ...currentNode,
       data: {loading: true},
     });
-    setLoading(true);
     aiService.generateImage(storyText).then((blob) => {
         if(blob.err !== undefined)
           alert('Artist Bot is currently rate limited!');
