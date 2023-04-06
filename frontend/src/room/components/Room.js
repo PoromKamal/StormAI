@@ -49,6 +49,12 @@ const Room = () => {
   }, [])
 
   const createRoom = async () => {
+    if(roomName.trim().length === 0){
+      return;
+    }
+    if(username.trim().length === 0){
+      return;
+    }
     const res = await roomService.createRoom({ name: roomName });
     if (!res.success) {
       console.log("Unable to create room");
@@ -118,7 +124,8 @@ const Room = () => {
                     <p className='text-2xl'>{roomId}</p>
                   </div>
                 </> :
-                <input className="w-fit text-3xl border border-solid border-2 rounded-md font-semibold p-1" type="text" placeholder='Enter room name' value={roomName} onChange={(e) => setRoomName(e.target.value)} />
+                <input className="w-fit text-3xl border border-solid border-2 rounded-md font-semibold p-1" type="text" placeholder='Enter room name' value={roomName} onChange={(e) => setRoomName(e.target.value)}
+                 />
             }
 
             {
