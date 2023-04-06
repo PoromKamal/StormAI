@@ -5,6 +5,9 @@
 - Project title: StormAI
 - Team name: Ctrl-Alt-Defeat
 
+## Application Deployed URL
+https://stormai.live
+
 ## Demo Video:
 https://www.youtube.com/watch?v=w_CINQVXP3g
 
