@@ -46,7 +46,7 @@ const AiDropdownButton = () => {
         onClick={toggleModal}>
         <FaRobot />
       </div>
-      {dropdownOpen && user.authenticated && user.data.pro !== 0 &&
+      {dropdownOpen && user.authenticated &&
         <div className="flex flex-col text-center left-10 top-1/2 -translate-y-1/2 fixed w-72 h-72 p-4 mr-14 mt-2 border rounded-md bg-gray-900 text-white opacity-90 z-50 shadow">
           <div className="mb-5">
             <ToolTip title="Drag these onto the board!">
@@ -87,14 +87,6 @@ const AiDropdownButton = () => {
           Please <a className="underline" href={`${process.env.REACT_APP_AUTH_SERVER}/oauth2/authorization/auth0`}>Login</a> to use bots!
         </div>
       }
-      {
-        dropdownOpen && user.authenticated && user.data.pro === 0 &&
-        <div className="flex flex-col text-center left-10 top-1/4 -translate-y-1/2 fixed w-72 h-fit p-4 mr-14 mt-2 border rounded-md bg-gray-900 text-white opacity-90 z-50 shadow">
-            <div className="underline cursor-pointer" onClick={handleRoutePayment}>Subscribe</div> for unlimited bot usage!
-        </div>
-      }
-
-
     </>
   );
 }
