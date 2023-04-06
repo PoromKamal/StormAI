@@ -15,6 +15,10 @@ const ChatNode = ({ id, data }) => {
   }, [])
 
   const onAskClick = () => {
+    if(data.text.trim().length===0){
+      alert("Please fill in a question!");
+      return;
+    }
     const currentNode = yDoc.getMap('nodes').get(id);
     yDoc.getMap('nodes').set(id, {
       ...currentNode,
