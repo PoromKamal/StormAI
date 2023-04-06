@@ -18,6 +18,10 @@ const ArtistNode = ({ id, data }) => {
   }, []);
 
   const onGenerateImageClick = () => {
+    if(storyText.trim().length===0){
+      alert("You must fill in the prompt!"); 
+      return;
+    }
     const currentNode = yDoc.getMap('nodes').get(id);
     yDoc.getMap('nodes').set(id, {
       ...currentNode,
