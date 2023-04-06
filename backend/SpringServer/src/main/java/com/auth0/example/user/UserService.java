@@ -1,10 +1,6 @@
-package com.auth0.example.service;
+package com.auth0.example.user;
 
 
-import com.auth0.example.model.User;
-import com.auth0.example.repository.UserRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,7 +39,7 @@ public record UserService(UserRepository userRepository){
     user = getMe();
 
     if (user == null) {
-      return user;
+      return null;
     }
     user.setPro(1);
     userRepository.save(user);

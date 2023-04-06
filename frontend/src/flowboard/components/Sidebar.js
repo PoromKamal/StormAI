@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { FaRegStickyNote, FaPen, FaCog, FaShareSquare, FaSitemap } from 'react-icons/fa';
+import {AiFillSave} from 'react-icons/ai';
+import apiService from '../../services/apiService';
 import AiDropdownButton from './button/AiDropdownButton';
 import Settings from './Settings';
 import Invite from './Invite';
+import { YjsContext } from '../../room/components/Room'
 
 const onDragStart = (event, nodeType) => {
   event.dataTransfer.setData('application/reactflow', nodeType);
@@ -12,6 +15,8 @@ const onDragStart = (event, nodeType) => {
 const Sidebar = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
+  const [saveOpen, setSaveOpen] = useState(false);
+  const { yDoc } = useContext(YjsContext);
 
   const toggleSettings = () => {
     if (inviteOpen) toggleInvite();
@@ -22,6 +27,17 @@ const Sidebar = () => {
     if (settingsOpen) toggleSettings();
     setInviteOpen(!inviteOpen);
   };
+
+  const saveWhiteboard = () =>{
+    let roomId = yDoc.getMap('roomInfo').get('info')._id;
+    let roomName = yDoc.getMap('roomInfo').get('info').name;
+    apiService.saveWhiteboard(roomId, roomName).then((response) => {
+      if(response.status == 200)
+        alert("Whiteboard has been saved to your collection!")
+      else
+        alert("Error saving whiteboard!")
+    });
+  }
 
   return (
     <>
@@ -59,6 +75,12 @@ const Sidebar = () => {
           onClick={toggleInvite}
         >
           <FaShareSquare />
+        </div>
+        <div
+          className="w-10 h-10 bg-gray-900 text-white border-none rounded shadow-md flex justify-center items-center text-xl my-1 hover:bg-gray-700 hover:scale-110 transition-transform hover: cursor-pointer"
+          onClick={saveWhiteboard}
+        >
+          <AiFillSave />
         </div>
       </div>
       {settingsOpen && <Settings />}

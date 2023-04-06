@@ -27,11 +27,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().and().authorizeRequests()
+        http.csrf().disable().cors().and().authorizeRequests()
             // allow all users to access the home pages and the static images directory
-            .mvcMatchers("/", "/images/**", "/getMe", "/upgradeUser").permitAll()
+            .mvcMatchers("/", "/images/**", "/getMe", "/upgradeUser", "/saveWhiteboard").permitAll()
             // all other requests must be authenticated
-            .anyRequest().authenticated()
             .and().oauth2Login()
             .successHandler(loginHandler)
             .and().logout()

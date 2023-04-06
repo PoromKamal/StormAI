@@ -26,7 +26,7 @@ const userColours = [
 ]
 
 const Room = () => {
-  const { roomId } = useParams();
+  const { roomId, launchRoomId } = useParams();
   const [roomName, setRoomName] = useState('');
   const [username, setUsername] = useState('');
   const [roomCreatedOrJoined, setRoomCreatedOrJoined] = useState(false);
@@ -59,16 +59,17 @@ const Room = () => {
 
   const joinRoom = async (room) => {
     // Use either roomId from url, roomName from input, or room from createRoom
-    let roomIdOrName = roomId || roomName;
+    let roomIdOrName = roomId || roomName || launchRoomId;
     if (room) {
       roomIdOrName = room;
     }
+    console.log(roomIdOrName);
     const res = await roomService.getRoomInfo(roomIdOrName);
     // Check if room exists or is full
     if (!res.success) {
       setRoomExists(false);
       return;
-    } else if (res.room.numUsers >= 5) {
+    } else if (res.room.numUsers >= 5 && !user.data.pro) {
       setRoomFull(true);
       return;
     }
@@ -111,10 +112,12 @@ const Room = () => {
           <div className='w-full flex gap-6 mt-10'>
 
             {
-              roomId ?
+              roomId ||  launchRoomId ?
                 <>
                   <div>
-                    You've been invited to:
+                    {
+                      roomId ? "You've been invited to:" : "Launch room?"
+                    }
                     <p className='text-2xl'>{roomId}</p>
                   </div>
                 </> :
@@ -139,7 +142,7 @@ const Room = () => {
           </div>
 
           {
-            roomId ?
+            roomId || launchRoomId ?
               <>
               </> :
               <>

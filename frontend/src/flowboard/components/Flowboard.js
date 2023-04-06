@@ -68,14 +68,14 @@ const Flowboard = () => {
       if (yDoc) {
         const lastUpdate = yDoc.getMap('roomInfo').get('lastUpdate');
         const time = new Date().getTime();
-        if (!lastUpdate || time - lastUpdate > 10000) {
+        if (!lastUpdate || time - lastUpdate > 2000) {
           console.log('Saving doc...');
           const roomId = yDoc.getMap('roomInfo').get('info')._id;
           const docState = prepareDocForSaving(yDoc);
           roomService.updateDoc(roomId, docState, time);
         }
       }
-    }, 10000);
+    }, 2000);
     return () => clearInterval(interval);
   }, []);
 
