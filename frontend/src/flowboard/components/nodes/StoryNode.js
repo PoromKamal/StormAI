@@ -15,6 +15,10 @@ const StoryNode = ({ id, data }) => {
   }, [])
 
   const onFinishStoryClick = () => {
+    if(data.text.trim().length===0){
+      alert("Please fill in the prompt to generate a story!");
+      return;
+    }
     const currentNode = yDoc.getMap('nodes').get(id);
     yDoc.getMap('nodes').set(id, {
       ...currentNode,
@@ -42,6 +46,7 @@ const StoryNode = ({ id, data }) => {
                 onChange={onChange}
                 className="textarea w-full bg-transparent text-black nodrag focus:bg-gray-100 focus:outline-none rounded"
                 value={data.text}
+                required
             />
             <ClipLoader
                 color='white'
