@@ -35,7 +35,7 @@ export default class apiService{
         return fetch(`${process.env.REACT_APP_ARTIST_BOT_SERVER}`, {
             method: 'POST',
             headers: {
-                "Authorization": `Bearer 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`
+                "Authorization": `Bearer ${process.env.HUGGING_FACE_TOKEN}`
             },
             body: JSON.stringify(payload)
         }).then((response) =>{
