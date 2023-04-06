@@ -75,7 +75,7 @@ const useFlowboardUtils = () => {
 
   const createNewCursorNode = (x, y, data) => {
     return {
-      id: `${data.user.name}-cursor`,
+      id: `${data.user.clientId}-cursor`,
       type: 'cursor',
       position: project({ x, y }),
       data: { label: `${data.user.name}`, cursor: { name: data.user.name, color: data.user.color } },
