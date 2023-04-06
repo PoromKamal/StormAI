@@ -37,13 +37,10 @@ const NavBar = () => {
     const animateText = "hover:animate-text hover:bg-gradient-to-r from-blue-900 via-indigo-500 to-cyan-400 bg-clip-text hover:text-transparent"
 
     return (
-        <div className="right-10 top-0 flex flex-col absolute z-10 font-Lato text-2xl mt-12 font-bold text-storm-blue">
+        <div className="right-10 top-0 flex flex-col gap-10 absolute z-10 font-Lato text-2xl mt-12 font-bold text-storm-blue">
             <div className={`transition-all hover:font-extrabold hover:scale-x-110 cursor-pointer ${animateText}`}
                 onClick={handlePricingClick}>
                 PRICING \
-            </div>
-            <div className={`transition-all my-10 hover:font-extrabold hover:scale-x-110 cursor-pointer ${animateText}`}>
-                ABOUT \
             </div>
             {
                 user.authenticated ? 
