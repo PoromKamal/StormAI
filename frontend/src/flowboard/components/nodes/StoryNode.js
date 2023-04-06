@@ -15,6 +15,10 @@ const StoryNode = ({ id, data }) => {
   }, [])
 
   const onFinishStoryClick = () => {
+    if(data.text.trim().length===0){
+      alert("Please fill in the prompt to generate a story!");
+      return;
+    }
     const currentNode = yDoc.getMap('nodes').get(id);
     yDoc.getMap('nodes').set(id, {
       ...currentNode,
