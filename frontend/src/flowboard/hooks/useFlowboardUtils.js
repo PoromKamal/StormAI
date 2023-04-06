@@ -75,7 +75,7 @@ const useFlowboardUtils = () => {
 
   const createNewCursorNode = (x, y, data) => {
     return {
-      id: `${data.user.name}-cursor`,
+      id: `${data.user.clientId}-cursor`,
       type: 'cursor',
       position: project({ x, y }),
       data: { label: `${data.user.name}`, cursor: { name: data.user.name, color: data.user.color } },
@@ -115,7 +115,7 @@ const useFlowboardUtils = () => {
       id: createNodeId(),
       type: 'story',
       position: project({ x: x - 144, y: y - 144 }),
-      data: { text: 'Start a story...', loading: false },
+      data: { text: '', loading: false },
     };
   }
 
@@ -124,7 +124,7 @@ const useFlowboardUtils = () => {
       id: createNodeId(),
       type: 'artist',
       position: project({ x: x - 144, y: y - 56 }),
-      data: { text: 'What to draw...' },
+      data: { text: '' },
     };
   }
 

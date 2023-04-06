@@ -18,13 +18,12 @@ const StoryNode = ({ id, data }) => {
     const currentNode = yDoc.getMap('nodes').get(id);
     yDoc.getMap('nodes').set(id, {
       ...currentNode,
-      data: { ...currentNode.data, loading: true },
+      data: { loading: true },
     });
     aiService.finishStory(data.text).then((res) => {
-        setLoading(false);
         yDoc.getMap('nodes').set(id, {
           ...currentNode,
-          data: { ...currentNode.data, text: res[0].generated_text, loading: false },
+          data: { text: res[0].generated_text, loading: false },
         });
     });
   }

@@ -68,14 +68,14 @@ const Flowboard = () => {
       if (yDoc) {
         const lastUpdate = yDoc.getMap('roomInfo').get('lastUpdate');
         const time = new Date().getTime();
-        if (!lastUpdate || time - lastUpdate > 10000) {
+        if (!lastUpdate || time - lastUpdate > 2000) {
           console.log('Saving doc...');
           const roomId = yDoc.getMap('roomInfo').get('info')._id;
           const docState = prepareDocForSaving(yDoc);
           roomService.updateDoc(roomId, docState, time);
         }
       }
-    }, 10000);
+    }, 2000);
     return () => clearInterval(interval);
   }, []);
 
@@ -143,13 +143,14 @@ const Flowboard = () => {
     // Compute the position of the cursor relative to the pan and zoom values
     const position = project({ x: (event.clientX - wrapperBounds.left - transform.current[0]) / transform.current[2], y: (event.clientY - wrapperBounds.top - transform.current[1]) / transform.current[2] });
     const user = yjsProvider.awareness.getLocalState().user;
-    const cursorNode = yDoc.getMap('nodes').get(`${user.name}-cursor`);
+    const cursorNode = yDoc.getMap('nodes').get(`${yDoc.clientID}-cursor`);
     if (cursorNode) {
-      yDoc.getMap('nodes').set(`${user.name}-cursor`, {
+      yDoc.getMap('nodes').set(`${yDoc.clientID}-cursor`, {
         ...cursorNode,
         position,
       });
     } else {
+      user.clientId = yDoc.clientID;
       const newNode = createNewNode('cursor', position, { user });
       yDoc.getMap('nodes').set(newNode.id, newNode);
     }
@@ -163,7 +164,7 @@ const Flowboard = () => {
       <div className={styles.rfWrapper} ref={wrapperRef}>
         <ReactFlow
           onPaneMouseMove={throttledSendCursorData}
-          nodes={nodes.filter(node => node.id !== `${yjsProvider.awareness.getLocalState().user.name}-cursor`)}
+          nodes={nodes.filter(node => node.id !== `${yDoc.clientID}-cursor`) }
           edges={edges}
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}

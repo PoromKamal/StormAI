@@ -1,6 +1,5 @@
-package com.auth0.example.repository;
+package com.auth0.example.user;
 
-import com.auth0.example.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
