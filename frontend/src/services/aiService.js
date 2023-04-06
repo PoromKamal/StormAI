@@ -1,23 +1,5 @@
 export default class apiService{
     static finishStory(prompt) {
-        const payload = {
-            "inputs": prompt,
-            "parameters": {
-                "temperature": 1,
-                "min_length": 25,
-                "max_new_tokens": 50,
-                "return_full_text": true,
-                "do_sample": true,
-                "seed": 10,
-                "early_stopping": false,
-                "length_penalty": 0.0
-            },
-            "options": {
-                "use_cache": true,
-                "wait_for_model": false
-            }
-        }
-
         return fetch(`${process.env.REACT_APP_NODE_SERVER}/ai/finishStory`, {
             method: 'POST',
             headers: {
@@ -53,7 +35,7 @@ export default class apiService{
         return fetch(`${process.env.REACT_APP_ARTIST_BOT_SERVER}`, {
             method: 'POST',
             headers: {
-                "Authorization": `Bearer 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`
+                "Authorization": `Bearer ${process.env.HUGGING_FACE_TOKEN}`
             },
             body: JSON.stringify(payload)
         }).then((response) =>{
