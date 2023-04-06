@@ -121,7 +121,8 @@ const Room = () => {
                     <p className='text-2xl'>{roomId}</p>
                   </div>
                 </> :
-                <input className="w-fit text-3xl border border-solid border-2 rounded-md font-semibold p-1" type="text" placeholder='Enter room name' value={roomName} onChange={(e) => setRoomName(e.target.value)} />
+                <input className="w-fit text-3xl border border-solid border-2 rounded-md font-semibold p-1" type="text" placeholder='Enter room name' value={roomName} onChange={(e) => setRoomName(e.target.value)}
+                 />
             }
 
             {
@@ -164,6 +165,7 @@ const Room = () => {
           {roomFull && <p className='mx-auto font-semibold text-red-500'>Room is full</p>}
         </div>
       </div>
+      //Trigger rebuild
     )
   }
 
