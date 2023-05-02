@@ -1,4 +1,10 @@
 # StormAI⛈️
+StormAI is a collaborative whiteboarding and brainstorming platform which leverages AI to facilitate productivity.
+
+StormAI boasts several notable features, including the integration of OpenAI's GPT-3.5, stable-diffusion and BLOOM, two powerful AI tools that allow users to generate ideas and visualize them with ease.
+
+## Sneak Peak
+<img src="https://user-images.githubusercontent.com/62628923/235805442-e1363b8e-66cc-440e-9687-ef41bf2d2d44.png" alt="alt text" width="1920" height="1080">
 
 ## Project title and team name
 
@@ -10,11 +16,6 @@ https://stormai.live
 
 ## Demo Video:
 https://www.youtube.com/watch?v=w_CINQVXP3g
-
-## Your focus (frontend focused or backend focused)
-
-Frontend focused.<br />
-This is because we want our users to have an excellent experience while whiteboarding/brainstorming on our platform.
 
 ## Team members with student numbers
 
