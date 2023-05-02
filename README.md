@@ -1,4 +1,4 @@
-# Project proposal
+# StormAI⛈️
 
 ## Project title and team name
 
