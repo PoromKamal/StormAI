@@ -3,6 +3,9 @@ StormAI is a collaborative whiteboarding and brainstorming platform which levera
 
 StormAI boasts several notable features, including the integration of OpenAI's GPT-3.5, stable-diffusion and BLOOM, two powerful AI tools that allow users to generate ideas and visualize them with ease.
 
+## The Tech behind StormAI
+Spring, Express, Node, React, PostgreSQL, MongoDB, AWS EC2, DigitalOcean, Tailwindcss, OpenAI, Stripe, Auth0, stable-diffusion-v5, Yjs
+
 ## Sneak Peak
 <img src="https://user-images.githubusercontent.com/62628923/235805442-e1363b8e-66cc-440e-9687-ef41bf2d2d44.png" alt="alt text" width="850" height="470">
 <img src="https://user-images.githubusercontent.com/62628923/235808291-46a68243-4a96-47d2-9226-244f144548c3.png" alt="alt text" width="850" height="470">
