@@ -32,9 +32,9 @@ Whether you're seeking answers to complex scientific concepts or simply looking 
 <img src="https://user-images.githubusercontent.com/62628923/235811075-60e5d885-fcf6-408f-a1cb-b3374bff919f.png" alt="alt text" width="300" height="300">
 
 ## The StormAI Team
-Jeremy La
-Porom Kamal
-Mir Safwat Ayser
+* Jeremy La 
+* Porom Kamal
+* Mir Safwat Ayser
 
 ## The Tech behind StormAI
 Spring, Express, Node, React, PostgreSQL, MongoDB, AWS EC2, DigitalOcean, Tailwindcss, OpenAI, Stripe, Auth0, stable-diffusion-v5, Yjs
