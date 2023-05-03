@@ -36,8 +36,5 @@ Whether you're seeking answers to complex scientific concepts or simply looking 
 * Porom Kamal
 * Mir Safwat Ayser
 
-## The Tech behind StormAI
-Spring, Express, Node, React, PostgreSQL, MongoDB, AWS EC2, DigitalOcean, Tailwindcss, OpenAI, Stripe, Auth0, stable-diffusion-v5, Yjs
-
 ## Demo Video:
 https://www.youtube.com/watch?v=w_CINQVXP3g
