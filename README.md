@@ -39,5 +39,7 @@ Whether you're seeking answers to complex scientific concepts or simply looking 
 * Porom Kamal
 * Mir Safwat Ayser
 
+### 3rd place 🏆 CSCC09 Winter 2023
+
 ## Demo Video:
 https://www.youtube.com/watch?v=w_CINQVXP3g
