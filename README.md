@@ -6,6 +6,8 @@ StormAI boasts several notable features, including the integration of OpenAI's G
 ## The Tech behind StormAI
 Spring, Express, Node, React, PostgreSQL, MongoDB, AWS EC2, DigitalOcean, Tailwindcss, OpenAI, Stripe, Auth0, stable-diffusion-v5, Yjs
 
+### 3rd place 🏆 CSCC09 Winter 2023
+
 ## Sneak Peak
 <img src="https://user-images.githubusercontent.com/62628923/235805442-e1363b8e-66cc-440e-9687-ef41bf2d2d44.png" alt="alt text" width="850" height="470">
 <img src="https://user-images.githubusercontent.com/62628923/235808291-46a68243-4a96-47d2-9226-244f144548c3.png" alt="alt text" width="850" height="470">
@@ -38,8 +40,6 @@ Whether you're seeking answers to complex scientific concepts or simply looking 
 * Jeremy La 
 * Porom Kamal
 * Mir Safwat Ayser
-
-### 3rd place 🏆 CSCC09 Winter 2023
 
 ## Demo Video:
 https://www.youtube.com/watch?v=w_CINQVXP3g
